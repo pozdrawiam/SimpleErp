@@ -9,7 +9,7 @@ public class ProductsController : ControllerBase
 {
     private readonly ILogger<ProductsController> _logger;
 
-    private static readonly List<string> Products = [];
+    private static readonly Dictionary<int, string> Products = [];
     
     public ProductsController(ILogger<ProductsController> logger)
     {
@@ -17,9 +17,20 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet]
-    public IEnumerable<string> GetAll()
+    public IEnumerable<KeyValuePair<int, string>> GetAll()
     {
-        return Products;
+        return Products.AsEnumerable();
+    }
+
+    [HttpGet("{id}")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult GetDetails(int id)
+    {
+        if (Products.TryGetValue(id, out var details))
+            return Ok(details);
+        
+        return NotFound();
     }
 
     [HttpPost]
@@ -29,7 +40,7 @@ public class ProductsController : ControllerBase
     {
         if (ModelState.IsValid)
         {
-            Products.Add(request.Name!);
+            Products.Add(DateTime.Now.Microsecond, request.Name!);
             
             _logger.LogInformation($"Created product: {request.Name}");
             
