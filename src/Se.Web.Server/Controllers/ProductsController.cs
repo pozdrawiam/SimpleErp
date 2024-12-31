@@ -9,7 +9,7 @@ public class ProductsController : ControllerBase
 {
     private readonly ILogger<ProductsController> _logger;
 
-    private static readonly Dictionary<int, string> Products = [];
+    private static readonly List<ProductDetails> Products = [];
     
     public ProductsController(ILogger<ProductsController> logger)
     {
@@ -19,7 +19,7 @@ public class ProductsController : ControllerBase
     #region Read
     
     [HttpGet]
-    public IEnumerable<KeyValuePair<int, string>> GetAll()
+    public IEnumerable<ProductDetails> GetAll()
     {
         return Products.AsEnumerable();
     }
@@ -29,7 +29,9 @@ public class ProductsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult GetDetails(int id)
     {
-        if (Products.TryGetValue(id, out var details))
+        var details = Products.FirstOrDefault(p => p.Id == id);
+        
+        if (details != default)
             return Ok(details);
         
         return NotFound();
@@ -44,16 +46,16 @@ public class ProductsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public IActionResult Create(ProductsCreateRequest request)
     {
-        if (ModelState.IsValid)
-        {
-            Products.Add(DateTime.Now.Microsecond, request.Name!);
-            
-            _logger.LogInformation($"Created product: {request.Name}");
-            
-            return Created();
-        }
+        if (!ModelState.IsValid) 
+            return BadRequest();
         
-        return BadRequest();
+        var product = new ProductDetails(DateTime.Now.Microsecond, request.Name!);
+        
+        Products.Add(product);
+        
+        _logger.LogInformation($"Created product: {product.Name}");
+            
+        return Created();
     }
     
     #endregion
