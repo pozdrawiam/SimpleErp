@@ -16,6 +16,8 @@ public class ProductsController : ControllerBase
         _logger = logger;
     }
 
+    #region Read
+    
     [HttpGet]
     public IEnumerable<KeyValuePair<int, string>> GetAll()
     {
@@ -32,7 +34,11 @@ public class ProductsController : ControllerBase
         
         return NotFound();
     }
+    
+    #endregion
 
+    #region Write
+    
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -49,4 +55,6 @@ public class ProductsController : ControllerBase
         
         return BadRequest();
     }
+    
+    #endregion
 }
