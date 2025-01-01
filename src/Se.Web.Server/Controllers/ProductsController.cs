@@ -7,14 +7,7 @@ namespace Se.Web.Server.Controllers;
 [Route("[controller]/[action]")]
 public class ProductsController : ControllerBase
 {
-    private readonly ILogger<ProductsController> _logger;
-
     private static readonly List<ProductDetails> Products = [];
-    
-    public ProductsController(ILogger<ProductsController> logger)
-    {
-        _logger = logger;
-    }
 
     #region Read
     
@@ -52,8 +45,6 @@ public class ProductsController : ControllerBase
         var product = new ProductDetails(DateTime.Now.Microsecond, request.Name!);
         
         Products.Add(product);
-        
-        _logger.LogInformation($"Created product: {product.Name}");
             
         return Created();
     }

@@ -1,20 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
-using NSubstitute;
-using Se.Web.Server.Controllers;
+﻿using Se.Web.Server.Controllers;
 
 namespace Se.Web.Server.Tests.Controllers;
 
 public class ProductsControllerTests
 {
-    private readonly ProductsController _sut;
+    private readonly ProductsController _sut = new();
     
-    private readonly ILogger<ProductsController> _loggerMock = Substitute.For<ILogger<ProductsController>>();
-
-    public ProductsControllerTests()
-    {
-        _sut = new ProductsController(_loggerMock);
-    }
-
     [Fact]
     public void GetAll_ShouldReturnResponse()
     {
