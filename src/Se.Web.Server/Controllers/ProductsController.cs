@@ -7,14 +7,14 @@ namespace Se.Web.Server.Controllers;
 [Route("[controller]/[action]")]
 public class ProductsController : ControllerBase
 {
-    private static readonly List<ProductDetails> Products = [];
+    private static readonly List<ProductDetails> Repo = [];
 
     #region Read
     
     [HttpGet]
     public IEnumerable<ProductDetails> GetAll()
     {
-        return Products.AsEnumerable();
+        return Repo.AsEnumerable();
     }
 
     [HttpGet("{id}")]
@@ -22,7 +22,7 @@ public class ProductsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult GetDetails(int id)
     {
-        var details = Products.FirstOrDefault(p => p.Id == id);
+        var details = Repo.FirstOrDefault(p => p.Id == id);
         
         if (details != default)
             return Ok(details);
@@ -44,7 +44,7 @@ public class ProductsController : ControllerBase
         
         var product = new ProductDetails(DateTime.Now.Microsecond, request.Name!);
         
-        Products.Add(product);
+        Repo.Add(product);
             
         return Created();
     }
@@ -58,17 +58,17 @@ public class ProductsController : ControllerBase
         if (!ModelState.IsValid) 
             return BadRequest();
         
-        var product = Products.FirstOrDefault(p => p.Id == id);
+        var product = Repo.FirstOrDefault(p => p.Id == id);
         
         if (product == default)
             return NotFound();
         
         var product2 = product with { Name = request.Name! };
-        int productIndex = Products.IndexOf(product);
+        int productIndex = Repo.IndexOf(product);
         
         if (productIndex != -1)
         {
-            Products[productIndex] = product2;
+            Repo[productIndex] = product2;
         }
         
         return NoContent();
@@ -79,12 +79,12 @@ public class ProductsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult Delete(int id)
     {
-        var product = Products.FirstOrDefault(p => p.Id == id);
+        var product = Repo.FirstOrDefault(p => p.Id == id);
         
         if (product == default)
             return NotFound();
 
-        Products.Remove(product);
+        Repo.Remove(product);
         
         return NoContent();
     }
