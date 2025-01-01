@@ -83,5 +83,20 @@ public class ProductsController : ControllerBase
         return NoContent();
     }
     
+    [HttpDelete]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult Delete(int id)
+    {
+        var product = Products.FirstOrDefault(p => p.Id == id);
+        
+        if (product == default)
+            return NotFound();
+
+        Products.Remove(product);
+        
+        return NoContent();
+    }
+    
     #endregion
 }
