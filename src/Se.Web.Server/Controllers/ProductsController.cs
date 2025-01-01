@@ -57,6 +57,31 @@ public class ProductsController : ControllerBase
             
         return Created();
     }
+
+    [HttpPut]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public IActionResult Update(int id, ProductsUpdateRequest request)
+    {
+        if (!ModelState.IsValid) 
+            return BadRequest();
+        
+        var product = Products.FirstOrDefault(p => p.Id == id);
+        
+        if (product == default)
+            return NotFound();
+        
+        var product2 = product with { Name = request.Name! };
+        int productIndex = Products.IndexOf(product);
+        
+        if (productIndex != -1)
+        {
+            Products[productIndex] = product2;
+        }
+        
+        return NoContent();
+    }
     
     #endregion
 }
