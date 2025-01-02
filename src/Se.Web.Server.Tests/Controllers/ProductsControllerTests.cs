@@ -18,19 +18,20 @@ public class ProductsControllerTests
     }
     
     [Fact]
-    public void GetAll_ShouldReturnResponse()
+    public async Task GetAll_ShouldReturnResponse()
     {
         _repo.GetAllAsync()
             .Returns([new ProductEntity(), new ProductEntity()]);
             
         // Act
-        var result = _sut.GetAll().ToArray();
+        var result = (await _sut.GetAll())
+            .ToArray();
         
         Assert.Equal(2, result.Length);
     }
     
     [Fact]
-    public void GetDetails_ShouldReturnOk_WhenEntityExists()
+    public async Task GetDetails_ShouldReturnOk_WhenEntityExists()
     {
         var id = 1;
         var product = new ProductEntity { Id = id, Name = "Entity" };
@@ -39,7 +40,8 @@ public class ProductsControllerTests
         var request = new ProductsGetDetailsRequest { Id = id };
 
         // Act
-        var response = _sut.GetDetails(request) as OkObjectResult;
+        var response = await _sut.GetDetails(request) 
+            as OkObjectResult;
         
         Assert.NotNull(response);
         Assert.Equal(200, response.StatusCode);
@@ -51,15 +53,16 @@ public class ProductsControllerTests
     }
 
     [Fact]
-    public void GetDetails_ShouldReturnNotFound_WhenEntityNotExist()
+    public async Task GetDetails_ShouldReturnNotFound_WhenEntityNotExist()
     {
-        int id = 1;
+        var id = 1;
         _repo.GetAsync(id).Returns((ProductEntity?)null);
 
         var request = new ProductsGetDetailsRequest { Id = id };
 
         // Act
-        NotFoundResult? response = _sut.GetDetails(request) as NotFoundResult;
+        NotFoundResult? response = await _sut.GetDetails(request) 
+            as NotFoundResult;
         
         Assert.NotNull(response);
         Assert.Equal(404, response.StatusCode);

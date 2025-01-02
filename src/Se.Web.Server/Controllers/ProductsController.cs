@@ -18,17 +18,18 @@ public class ProductsController : ControllerBase
     #region Read
     
     [HttpGet]
-    public IEnumerable<ProductDetails> GetAll()
+    public async Task<IEnumerable<ProductDetails>> GetAll()
     {
-        return _repo.GetAllAsync().Result.Select(MapToDetails);
+        return (await _repo.GetAllAsync())
+            .Select(MapToDetails);
     }
 
     [HttpGet]
     [ProducesResponseType(typeof(ProductDetails), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetDetails(ProductsGetDetailsRequest request)
+    public async Task<IActionResult> GetDetails(ProductsGetDetailsRequest request)
     {
-        var product = _repo.GetAsync(request.Id).Result;
+        var product = await _repo.GetAsync(request.Id);
 
         if (product == default)
             return NotFound();
@@ -45,7 +46,7 @@ public class ProductsController : ControllerBase
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public IActionResult Create(ProductsCreateRequest request)
+    public async Task<IActionResult> Create(ProductsCreateRequest request)
     {
         if (!ModelState.IsValid) 
             return BadRequest();
@@ -56,7 +57,7 @@ public class ProductsController : ControllerBase
             Name = request.Name!
         };
         
-        _repo.AddAsync(product);
+        await _repo.AddAsync(product);
             
         return Created();
     }
@@ -65,7 +66,7 @@ public class ProductsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Update(ProductsUpdateRequest request)
+    public async Task<IActionResult> Update(ProductsUpdateRequest request)
     {
         if (!ModelState.IsValid) 
             return BadRequest();
@@ -77,7 +78,7 @@ public class ProductsController : ControllerBase
         
         product.Name = request.Name!;
         
-        _repo.UpdateAsync(product);
+        await _repo.UpdateAsync(product);
         
         return NoContent();
     }
@@ -85,9 +86,9 @@ public class ProductsController : ControllerBase
     [HttpDelete]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Delete(ProductsDeleteRequest request)
+    public async Task<IActionResult> Delete(ProductsDeleteRequest request)
     {
-        _repo.DeleteAsync(request.Id);
+        await _repo.DeleteAsync(request.Id);
         
         return NoContent();
     }
