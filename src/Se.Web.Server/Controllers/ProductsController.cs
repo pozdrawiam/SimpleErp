@@ -88,7 +88,14 @@ public class ProductsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Delete(ProductsDeleteRequest request)
     {
-        await _repo.DeleteAsync(request.Id);
+        try
+        {
+            await _repo.DeleteAsync(request.Id);
+        }
+        catch (KeyNotFoundException e)
+        {
+            return BadRequest(e.Message);
+        }
         
         return NoContent();
     }

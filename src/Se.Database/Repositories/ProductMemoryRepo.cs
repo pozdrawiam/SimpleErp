@@ -44,7 +44,7 @@ public class ProductMemoryRepo : IProductRepo
         var product = Repo.FirstOrDefault(p => p.Id == id);
         
         if (product == null)
-            throw new InvalidOperationException("Product not found.");
+            throw new KeyNotFoundException("Entity not found.");
 
         Repo.Remove(product);
         
