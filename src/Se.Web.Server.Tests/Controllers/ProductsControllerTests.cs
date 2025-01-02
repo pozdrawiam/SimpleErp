@@ -68,4 +68,86 @@ public class ProductsControllerTests
         Assert.Equal(404, response.StatusCode);
     }
 
+    [Fact]
+    public async Task Create_ShouldReturnOk_WhenModelIsValid()
+    {
+        var id = 1;
+        var request = new ProductsCreateRequest("Name");
+        _repo.AddAsync(Arg.Any<ProductEntity>()).Returns(id);
+
+        // Act
+        OkObjectResult? response = await _sut.Create(request)
+            as OkObjectResult;
+        
+        Assert.NotNull(response);
+        
+        int? result = response.Value as int?;
+
+        Assert.NotNull(result);
+        Assert.Equal(id, result);
+    }
+
+    [Fact]
+    public async Task Create_ShouldReturnBadRequest_WhenModelIsInvalid()
+    {
+        var request = new ProductsCreateRequest(null);
+        _sut.ModelState.AddModelError(nameof(request.Name), "Required");
+
+        // Act
+        var result = await _sut.Create(request);
+        
+        Assert.IsType<BadRequestResult>(result);
+    }
+
+    [Fact]
+    public async Task Update_ShouldReturnNoContent_WhenEntityExists()
+    {
+        var id = 1;
+        var entity = new ProductEntity { Id = id, Name = "Old Name" };
+        _repo.GetAsync(id).Returns(entity);
+
+        var request = new ProductsUpdateRequest("Updated Name") { Id = id };
+
+        // Act
+        var result = await _sut.Update(request);
+        
+        Assert.IsType<NoContentResult>(result);
+    }
+
+    [Fact]
+    public async Task Update_ShouldReturnNotFound_WhenProductDoesNotExist()
+    {
+        var id = 1;
+        _repo.GetAsync(id).Returns((ProductEntity?)null);
+
+        var request = new ProductsUpdateRequest("Updated Name") { Id = id };
+
+        // Act
+        var result = await _sut.Update(request);
+        
+        Assert.IsType<NotFoundResult>(result);
+    }
+
+    [Fact]
+    public async Task Update_ShouldReturnBadRequest_WhenModelIsInvalid()
+    {
+        var request = new ProductsUpdateRequest(null) { Id = 1 };
+        _sut.ModelState.AddModelError("Name", "Required");
+
+        // Act
+        var result = await _sut.Update(request);
+        
+        Assert.IsType<BadRequestResult>(result);
+    }
+    
+    [Fact]
+    public async Task Delete_ShouldReturnNoContent()
+    {
+        var request = new ProductsDeleteRequest { Id = 1 };
+
+        // Act
+        var result = await _sut.Delete(request);
+        
+        Assert.IsType<NoContentResult>(result);
+    }
 }

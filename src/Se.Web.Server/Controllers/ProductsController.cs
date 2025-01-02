@@ -44,7 +44,7 @@ public class ProductsController : ControllerBase
     #region Write
     
     [HttpPost]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Create(ProductsCreateRequest request)
     {
@@ -57,9 +57,9 @@ public class ProductsController : ControllerBase
             Name = request.Name!
         };
         
-        await _repo.AddAsync(product);
+        int id = await _repo.AddAsync(product);
             
-        return Created();
+        return Ok(id);
     }
 
     [HttpPut]
