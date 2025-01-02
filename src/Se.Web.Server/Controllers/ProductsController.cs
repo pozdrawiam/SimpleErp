@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Se.Application.Features.Products;
 using Se.Web.Server.Dto.Products;
 
 namespace Se.Web.Server.Controllers;
@@ -7,14 +8,19 @@ namespace Se.Web.Server.Controllers;
 [Route("[controller]/[action]")]
 public class ProductsController : ControllerBase
 {
-    private static readonly List<ProductDetails> Repo = [];
+    private readonly IProductRepo _repo;
 
+    public ProductsController(IProductRepo repo)
+    {
+        _repo = repo;
+    }
+    
     #region Read
     
     [HttpGet]
     public IEnumerable<ProductDetails> GetAll()
     {
-        return Repo.AsEnumerable();
+        return _repo.GetAllAsync().Result.Select(MapToDetails);
     }
 
     [HttpGet]
@@ -22,7 +28,7 @@ public class ProductsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult GetDetails(ProductsGetDetailsRequest request)
     {
-        var details = Repo.FirstOrDefault(p => p.Id == request.Id);
+        var details = _repo.GetAsync(request.Id).Result;
         
         if (details != default)
             return Ok(details);
@@ -42,9 +48,13 @@ public class ProductsController : ControllerBase
         if (!ModelState.IsValid) 
             return BadRequest();
         
-        var product = new ProductDetails(DateTime.Now.Microsecond, request.Name!);
+        var product = new ProductEntity
+        {
+            Id = DateTime.Now.Microsecond,
+            Name = request.Name!
+        };
         
-        Repo.Add(product);
+        _repo.AddAsync(product);
             
         return Created();
     }
@@ -58,18 +68,14 @@ public class ProductsController : ControllerBase
         if (!ModelState.IsValid) 
             return BadRequest();
         
-        var product = Repo.FirstOrDefault(p => p.Id == request.Id);
+        var product = _repo.GetAsync(request.Id).Result;
         
         if (product == default)
             return NotFound();
         
-        var product2 = product with { Name = request.Name! };
-        int productIndex = Repo.IndexOf(product);
+        product.Name = request.Name!;
         
-        if (productIndex != -1)
-        {
-            Repo[productIndex] = product2;
-        }
+        _repo.UpdateAsync(product);
         
         return NoContent();
     }
@@ -79,15 +85,19 @@ public class ProductsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult Delete(ProductsDeleteRequest request)
     {
-        var product = Repo.FirstOrDefault(p => p.Id == request.Id);
-        
-        if (product == default)
-            return NotFound();
-
-        Repo.Remove(product);
+        _repo.DeleteAsync(request.Id);
         
         return NoContent();
     }
     
+    #endregion
+
+    #region Shared
+
+    private ProductDetails MapToDetails(ProductEntity entity)
+    {
+        return new ProductDetails(entity.Id, entity.Name);
+    }
+
     #endregion
 }
