@@ -28,12 +28,14 @@ public class ProductsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public IActionResult GetDetails(ProductsGetDetailsRequest request)
     {
-        var details = _repo.GetAsync(request.Id).Result;
+        var product = _repo.GetAsync(request.Id).Result;
+
+        if (product == default)
+            return NotFound();
+
+        var details = MapToDetails(product);
         
-        if (details != default)
-            return Ok(details);
-        
-        return NotFound();
+        return Ok(details);
     }
     
     #endregion
