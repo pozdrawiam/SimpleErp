@@ -22,6 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Se.Application\Se.Application.csproj" />
       <ProjectReference Include="..\Se.Web.Server\Se.Web.Server.csproj" />
     </ItemGroup>
 
