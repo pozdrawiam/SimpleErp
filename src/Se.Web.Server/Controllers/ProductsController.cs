@@ -17,12 +17,12 @@ public class ProductsController : ControllerBase
         return Repo.AsEnumerable();
     }
 
-    [HttpGet("{id}")]
+    [HttpGet]
     [ProducesResponseType(typeof(ProductDetails), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult GetDetails(int id)
+    public IActionResult GetDetails(ProductsGetDetailsRequest request)
     {
-        var details = Repo.FirstOrDefault(p => p.Id == id);
+        var details = Repo.FirstOrDefault(p => p.Id == request.Id);
         
         if (details != default)
             return Ok(details);
@@ -49,16 +49,16 @@ public class ProductsController : ControllerBase
         return Created();
     }
 
-    [HttpPut("{id}")]
+    [HttpPut]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Update(int id, ProductsUpdateRequest request)
+    public IActionResult Update(ProductsUpdateRequest request)
     {
         if (!ModelState.IsValid) 
             return BadRequest();
         
-        var product = Repo.FirstOrDefault(p => p.Id == id);
+        var product = Repo.FirstOrDefault(p => p.Id == request.Id);
         
         if (product == default)
             return NotFound();
@@ -74,12 +74,12 @@ public class ProductsController : ControllerBase
         return NoContent();
     }
     
-    [HttpDelete("{id}")]
+    [HttpDelete]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public IActionResult Delete(int id)
+    public IActionResult Delete(ProductsDeleteRequest request)
     {
-        var product = Repo.FirstOrDefault(p => p.Id == id);
+        var product = Repo.FirstOrDefault(p => p.Id == request.Id);
         
         if (product == default)
             return NotFound();
