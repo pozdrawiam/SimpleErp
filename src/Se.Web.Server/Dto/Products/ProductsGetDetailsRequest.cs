@@ -1,3 +1,3 @@
 ﻿namespace Se.Web.Server.Dto.Products;
 
-public record ProductsGetDetailsRequest(int Id);
+public record ProductsGetDetailsRequest : IdRequestBase;
