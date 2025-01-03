@@ -1,4 +1,4 @@
-﻿namespace Se.Application.Features.Products;
+﻿namespace Se.Domain.Features.Products;
 
 public class ProductEntity
 {

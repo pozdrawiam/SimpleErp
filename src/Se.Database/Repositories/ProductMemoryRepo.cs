@@ -1,4 +1,5 @@
 ﻿using Se.Application.Features.Products;
+using Se.Domain.Features.Products;
 
 namespace Se.Database.Repositories;
 

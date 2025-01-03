@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Se.Application.Features.Products;
+using Se.Domain.Features.Products;
 using Se.Web.Server.Controllers;
 using Se.Web.Server.Dto.Products;
 

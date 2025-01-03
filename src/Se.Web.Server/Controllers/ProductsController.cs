@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Se.Application.Features.Products;
+using Se.Domain.Features.Products;
 using Se.Web.Server.Dto.Products;
 
 namespace Se.Web.Server.Controllers;
