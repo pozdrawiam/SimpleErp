@@ -1,13 +1,12 @@
 using Microsoft.AspNetCore.Mvc;
 using Se.Application.Features.Products;
 using Se.Domain.Features.Products;
+using Se.Web.Server.Base;
 using Se.Web.Server.Dto.Products;
 
 namespace Se.Web.Server.Controllers;
 
-[ApiController]
-[Route("[controller]/[action]")]
-public class ProductsController : ControllerBase
+public class ProductsController : AppApiController
 {
     private readonly IProductRepo _repo;
 
