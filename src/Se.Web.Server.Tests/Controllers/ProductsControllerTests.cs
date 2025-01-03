@@ -38,7 +38,7 @@ public class ProductsControllerTests
         var product = new ProductEntity { Id = id, Name = "Entity" };
         _repo.GetAsync(id).Returns(product);
 
-        var request = new ProductsGetDetailsRequest { Id = id };
+        var request = new ProductGetDetailsRequest { Id = id };
 
         // Act
         var response = await _sut.GetDetails(request) 
@@ -59,7 +59,7 @@ public class ProductsControllerTests
         var id = 1;
         _repo.GetAsync(id).Returns((ProductEntity?)null);
 
-        var request = new ProductsGetDetailsRequest { Id = id };
+        var request = new ProductGetDetailsRequest { Id = id };
 
         // Act
         NotFoundResult? response = await _sut.GetDetails(request) 
@@ -73,7 +73,7 @@ public class ProductsControllerTests
     public async Task Create_ShouldReturnOk_WhenModelIsValid()
     {
         var id = 1;
-        var request = new ProductsCreateRequest("Name");
+        var request = new ProductCreateRequest("Name");
         _repo.AddAsync(Arg.Any<ProductEntity>()).Returns(id);
 
         // Act
@@ -91,7 +91,7 @@ public class ProductsControllerTests
     [Fact]
     public async Task Create_ShouldReturnBadRequest_WhenModelIsInvalid()
     {
-        var request = new ProductsCreateRequest(null);
+        var request = new ProductCreateRequest(null);
         _sut.ModelState.AddModelError(nameof(request.Name), "Required");
 
         // Act
@@ -107,7 +107,7 @@ public class ProductsControllerTests
         var entity = new ProductEntity { Id = id, Name = "Old Name" };
         _repo.GetAsync(id).Returns(entity);
 
-        var request = new ProductsUpdateRequest("Updated Name") { Id = id };
+        var request = new ProductUpdateRequest("Updated Name") { Id = id };
 
         // Act
         var result = await _sut.Update(request);
@@ -121,7 +121,7 @@ public class ProductsControllerTests
         var id = 1;
         _repo.GetAsync(id).Returns((ProductEntity?)null);
 
-        var request = new ProductsUpdateRequest("Updated Name") { Id = id };
+        var request = new ProductUpdateRequest("Updated Name") { Id = id };
 
         // Act
         var result = await _sut.Update(request);
@@ -132,7 +132,7 @@ public class ProductsControllerTests
     [Fact]
     public async Task Update_ShouldReturnBadRequest_WhenModelIsInvalid()
     {
-        var request = new ProductsUpdateRequest(null) { Id = 1 };
+        var request = new ProductUpdateRequest(null) { Id = 1 };
         _sut.ModelState.AddModelError("Name", "Required");
 
         // Act
@@ -144,7 +144,7 @@ public class ProductsControllerTests
     [Fact]
     public async Task Delete_ShouldReturnNoContent()
     {
-        var request = new ProductsDeleteRequest { Id = 1 };
+        var request = new ProductDeleteRequest { Id = 1 };
 
         // Act
         var result = await _sut.Delete(request);

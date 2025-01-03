@@ -27,7 +27,7 @@ public class ProductsController : AppApiController
     [HttpGet]
     [ProducesResponseType(typeof(ProductDetails), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetDetails(ProductsGetDetailsRequest request)
+    public async Task<IActionResult> GetDetails(ProductGetDetailsRequest request)
     {
         var product = await _repo.GetAsync(request.Id);
 
@@ -46,7 +46,7 @@ public class ProductsController : AppApiController
     [HttpPost]
     [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create(ProductsCreateRequest request)
+    public async Task<IActionResult> Create(ProductCreateRequest request)
     {
         if (!ModelState.IsValid) 
             return BadRequest();
@@ -66,7 +66,7 @@ public class ProductsController : AppApiController
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Update(ProductsUpdateRequest request)
+    public async Task<IActionResult> Update(ProductUpdateRequest request)
     {
         if (!ModelState.IsValid) 
             return BadRequest();
@@ -86,7 +86,7 @@ public class ProductsController : AppApiController
     [HttpDelete]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Delete(ProductsDeleteRequest request)
+    public async Task<IActionResult> Delete(ProductDeleteRequest request)
     {
         try
         {
