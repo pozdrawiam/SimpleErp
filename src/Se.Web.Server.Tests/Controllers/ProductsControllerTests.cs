@@ -34,7 +34,7 @@ public class ProductsControllerTests
     [Fact]
     public async Task GetDetails_ShouldReturnOk_WhenEntityExists()
     {
-        var id = 1;
+        const int id = 1;
         var product = new ProductEntity { Id = id, Name = "Entity" };
         _repo.GetAsync(id).Returns(product);
 
@@ -56,7 +56,7 @@ public class ProductsControllerTests
     [Fact]
     public async Task GetDetails_ShouldReturnNotFound_WhenEntityNotExist()
     {
-        var id = 1;
+        const int id = 1;
         _repo.GetAsync(id).Returns((ProductEntity?)null);
 
         var request = new ProductGetDetailsRequest { Id = id };
@@ -72,7 +72,7 @@ public class ProductsControllerTests
     [Fact]
     public async Task Create_ShouldReturnOk_WhenModelIsValid()
     {
-        var id = 1;
+        const int id = 1;
         var request = new ProductCreateRequest("Name");
         _repo.AddAsync(Arg.Any<ProductEntity>()).Returns(id);
 
@@ -103,7 +103,7 @@ public class ProductsControllerTests
     [Fact]
     public async Task Update_ShouldReturnNoContent_WhenEntityExists()
     {
-        var id = 1;
+        const int id = 1;
         var entity = new ProductEntity { Id = id, Name = "Old Name" };
         _repo.GetAsync(id).Returns(entity);
 
@@ -118,7 +118,7 @@ public class ProductsControllerTests
     [Fact]
     public async Task Update_ShouldReturnNotFound_WhenProductDoesNotExist()
     {
-        var id = 1;
+        const int id = 1;
         _repo.GetAsync(id).Returns((ProductEntity?)null);
 
         var request = new ProductUpdateRequest("Updated Name") { Id = id };
