@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Se.Application.Features.Products;
 using Se.Domain.Features.Products;
 using Se.Web.Server.Base;
+using Se.Web.Server.Dto.Crud;
 using Se.Web.Server.Dto.Products;
 
 namespace Se.Web.Server.Controllers;
@@ -44,9 +45,9 @@ public class ProductsController : AppApiController
     #region Write
     
     [HttpPost]
-    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> Create(ProductCreateRequest request)
+    public async Task<ActionResult<CreateResponse>> Create(ProductCreateRequest request)
     {
         if (!ModelState.IsValid) 
             return BadRequest();
@@ -59,7 +60,7 @@ public class ProductsController : AppApiController
         
         int id = await _repo.AddAsync(product);
             
-        return Ok(id);
+        return Ok(new CreateResponse(id));
     }
 
     [HttpPut]

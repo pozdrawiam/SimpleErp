@@ -3,6 +3,7 @@ using NSubstitute;
 using Se.Application.Features.Products;
 using Se.Domain.Features.Products;
 using Se.Web.Server.Controllers;
+using Se.Web.Server.Dto.Crud;
 using Se.Web.Server.Dto.Products;
 
 namespace Se.Web.Server.Tests.Controllers;
@@ -77,15 +78,15 @@ public class ProductsControllerTests
         _repo.AddAsync(Arg.Any<ProductEntity>()).Returns(id);
 
         // Act
-        OkObjectResult? response = await _sut.Create(request)
-            as OkObjectResult;
+        var result = (await _sut.Create(request))
+            .Result as OkObjectResult;
+        
+        Assert.NotNull(result);
+        
+        var response = result.Value as CreateResponse;
         
         Assert.NotNull(response);
-        
-        int? result = response.Value as int?;
-
-        Assert.NotNull(result);
-        Assert.Equal(id, result);
+        Assert.Equal(id, response.Id);
     }
 
     [Fact]
@@ -95,9 +96,9 @@ public class ProductsControllerTests
         _sut.ModelState.AddModelError(nameof(request.Name), "Required");
 
         // Act
-        var result = await _sut.Create(request);
+        var actionResult = await _sut.Create(request);
         
-        Assert.IsType<BadRequestResult>(result);
+        Assert.IsType<BadRequestResult>(actionResult.Result);
     }
 
     [Fact]
