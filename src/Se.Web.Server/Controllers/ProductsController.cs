@@ -85,17 +85,14 @@ public class ProductsController : AppApiController
     
     [HttpDelete]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Delete(ProductDeleteRequest request)
+    public async Task<IActionResult> DeleteMany(ProductDeleteRequest request)
     {
-        try
-        {
-            await _repo.DeleteAsync(request.Id);
-        }
-        catch (KeyNotFoundException e)
-        {
-            return BadRequest(e.Message);
-        }
+        if (!ModelState.IsValid) 
+            return BadRequest(ModelState);
+        
+        await _repo.DeleteManyAsync(request.Ids!);
         
         return NoContent();
     }

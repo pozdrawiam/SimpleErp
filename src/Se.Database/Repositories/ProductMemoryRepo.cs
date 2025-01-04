@@ -56,14 +56,14 @@ public class ProductMemoryRepo : IProductRepo
         return Task.CompletedTask;
     }
 
-    public Task DeleteAsync(int id)
+    public Task DeleteManyAsync(IReadOnlyCollection<int> ids)
     {
-        var product = Repo.FirstOrDefault(p => p.Id == id);
+        var entities = Repo.Where(x => ids.Contains(x.Id));
 
-        if (product == null)
-            throw new KeyNotFoundException("Entity not found.");
-
-        Repo.Remove(product);
+        foreach (var entity in entities)
+        {
+            Repo.Remove(entity);
+        }
 
         return Task.CompletedTask;
     }

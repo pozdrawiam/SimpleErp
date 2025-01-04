@@ -142,12 +142,12 @@ public class ProductsControllerTests
     }
     
     [Fact]
-    public async Task Delete_ShouldReturnNoContent()
+    public async Task DeleteMany_ShouldReturnNoContent()
     {
-        var request = new ProductDeleteRequest { Id = 1 };
+        var request = new ProductDeleteRequest { Ids = [ 1, 2 ] };
 
         // Act
-        var result = await _sut.Delete(request);
+        var result = await _sut.DeleteMany(request);
         
         Assert.IsType<NoContentResult>(result);
     }

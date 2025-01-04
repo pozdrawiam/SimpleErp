@@ -7,5 +7,5 @@ public interface ICrudRepo<TEntity>
 
     Task<int> AddAsync(TEntity entity);
     Task UpdateAsync(TEntity entity);
-    Task DeleteAsync(int entity);
+    Task DeleteManyAsync(IReadOnlyCollection<int> ids);
 }
