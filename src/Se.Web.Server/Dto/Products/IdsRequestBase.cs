@@ -2,7 +2,7 @@
 
 namespace Se.Web.Server.Dto.Products;
 
-public record IdsRequestBase
+public abstract record IdsRequestBase
 {
     [Required]
     public IReadOnlyCollection<int>? Ids { get; init; }
