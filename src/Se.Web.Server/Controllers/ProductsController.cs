@@ -31,7 +31,7 @@ public class ProductsController : AppApiController
     {
         var product = await _repo.GetAsync(request.Id);
 
-        if (product == default)
+        if (product is null)
             return NotFound();
 
         var details = MapToDetails(product);
@@ -73,7 +73,7 @@ public class ProductsController : AppApiController
         
         var product = _repo.GetAsync(request.Id).Result;
         
-        if (product == default)
+        if (product is null)
             return NotFound();
         
         product.Name = request.Name!;
