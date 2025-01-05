@@ -39,7 +39,7 @@ public class ProductsControllerTests
         var product = new ProductEntity { Id = id, Name = "Entity" };
         _repo.GetAsync(id).Returns(product);
 
-        var request = new ProductGetDetailsRequest { Id = id };
+        var request = new GetDetailsRequest(id);
 
         // Act
         var response = await _sut.GetDetails(request) 
@@ -60,7 +60,7 @@ public class ProductsControllerTests
         const int id = 1;
         _repo.GetAsync(id).Returns((ProductEntity?)null);
 
-        var request = new ProductGetDetailsRequest { Id = id };
+        var request = new GetDetailsRequest(id);
 
         // Act
         NotFoundResult? response = await _sut.GetDetails(request) 

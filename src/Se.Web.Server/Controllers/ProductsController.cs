@@ -28,7 +28,7 @@ public class ProductsController : AppApiController
     [HttpGet]
     [ProducesResponseType(typeof(ProductDetails), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetDetails(ProductGetDetailsRequest request)
+    public async Task<IActionResult> GetDetails(GetDetailsRequest request)
     {
         var product = await _repo.GetAsync(request.Id);
 
