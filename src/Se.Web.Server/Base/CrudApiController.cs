@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Se.Application.Base.Database;
 using Se.Web.Server.Dto.Crud;
-using Se.Web.Server.Dto.Products;
 
 namespace Se.Web.Server.Base;
 
