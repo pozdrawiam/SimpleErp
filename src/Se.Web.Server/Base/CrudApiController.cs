@@ -7,20 +7,14 @@ namespace Se.Web.Server.Base;
 public abstract class CrudApiController< //todo: in progress
     TEntity,
     TGetAllRequest, TGetAllResponse,
-    TGetDetailsRequest, TGetDetailsResponse,
-    TCreateRequest, TCreateResponse,
-    TUpdateRequest, TUpdateResponse,
-    TDeleteManyRequest, TDeleteManyResponse
+    TGetDetailsResponse,
+    TCreateRequest,
+    TUpdateRequest
 >
     : AppApiController
-    where TGetDetailsRequest : GetDetailsRequest
     where TGetDetailsResponse : GetDetailsResponse
     where TCreateRequest : CreateRequest
-    where TCreateResponse : CreateResponse
     where TUpdateRequest : UpdateRequest
-    where TUpdateResponse : UpdateResponse
-    where TDeleteManyRequest : DeleteManyRequest
-    where TDeleteManyResponse : DeleteManyResponse
 {
     private readonly ICrudRepo<TEntity> _repo;
 
@@ -42,7 +36,7 @@ public abstract class CrudApiController< //todo: in progress
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<TGetDetailsResponse>> GetDetails(TGetDetailsRequest request)
+    public async Task<ActionResult<GetDetailsResponse>> GetDetails(GetDetailsRequest request)
     {
         TEntity? entity = await _repo.GetAsync(request.Id);
 
@@ -61,7 +55,7 @@ public abstract class CrudApiController< //todo: in progress
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<TCreateResponse>> Create(TCreateRequest request)
+    public async Task<ActionResult<CreateResponse>> Create(TCreateRequest request)
     {
         throw new NotImplementedException();
     }
@@ -70,7 +64,7 @@ public abstract class CrudApiController< //todo: in progress
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<TUpdateResponse>> Update(TUpdateRequest request)
+    public async Task<ActionResult<UpdateResponse>> Update(TUpdateRequest request)
     {
         throw new NotImplementedException();
     }
@@ -79,7 +73,7 @@ public abstract class CrudApiController< //todo: in progress
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<TDeleteManyResponse>> DeleteMany(TDeleteManyRequest request)
+    public async Task<ActionResult<DeleteManyResponse>> DeleteMany(DeleteManyRequest request)
     {
         throw new NotImplementedException();
     }
