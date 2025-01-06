@@ -17,6 +17,8 @@ public abstract class CrudApiController< //todo: in progress
     where TGetDetailsResponse : GetDetailsResponse
     where TCreateRequest : CreateRequest
     where TCreateResponse : CreateResponse
+    where TUpdateRequest : UpdateRequest
+    where TUpdateResponse : UpdateResponse
 {
     private readonly ICrudRepo<TEntity> _repo;
 

@@ -102,7 +102,7 @@ public class ProductsControllerTests
     }
 
     [Fact]
-    public async Task Update_ShouldReturnNoContent_WhenEntityExists()
+    public async Task Update_ShouldReturnOk_WhenEntityExists()
     {
         const int id = 1;
         var entity = new ProductEntity { Id = id, Name = "Old Name" };
@@ -111,9 +111,14 @@ public class ProductsControllerTests
         var request = new ProductUpdateRequest("Updated Name") { Id = id };
 
         // Act
-        var result = await _sut.Update(request);
+        var actionResult = (await _sut.Update(request))
+            .Result as OkObjectResult;
         
-        Assert.IsType<NoContentResult>(result);
+        Assert.NotNull(actionResult);
+        
+        var response = actionResult.Value as UpdateResponse;
+        
+        Assert.NotNull(response);
     }
 
     [Fact]
@@ -125,9 +130,9 @@ public class ProductsControllerTests
         var request = new ProductUpdateRequest("Updated Name") { Id = id };
 
         // Act
-        var result = await _sut.Update(request);
+        var actionResult = await _sut.Update(request);
         
-        Assert.IsType<NotFoundResult>(result);
+        Assert.IsType<NotFoundResult>(actionResult.Result);
     }
 
     [Fact]
@@ -137,9 +142,9 @@ public class ProductsControllerTests
         _sut.ModelState.AddModelError("Name", "Required");
 
         // Act
-        var result = await _sut.Update(request);
+        var actionResult = await _sut.Update(request);
         
-        Assert.IsType<BadRequestResult>(result);
+        Assert.IsType<BadRequestResult>(actionResult.Result);
     }
     
     [Fact]

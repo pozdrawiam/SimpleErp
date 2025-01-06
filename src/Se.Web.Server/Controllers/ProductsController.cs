@@ -64,10 +64,10 @@ public class ProductsController : AppApiController
     }
 
     [HttpPut]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Update(ProductUpdateRequest request)
+    public async Task<ActionResult<UpdateResponse>> Update(ProductUpdateRequest request)
     {
         if (!ModelState.IsValid) 
             return BadRequest();
@@ -81,7 +81,7 @@ public class ProductsController : AppApiController
         
         await _repo.UpdateAsync(product);
         
-        return NoContent();
+        return Ok(new UpdateResponse());
     }
     
     [HttpDelete]
