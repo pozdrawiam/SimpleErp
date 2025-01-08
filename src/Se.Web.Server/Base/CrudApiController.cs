@@ -12,9 +12,9 @@ public abstract class CrudApiController< //todo: in progress
     TUpdateRequest
 >
     : AppApiController
-    where TGetDetailsResponse : GetDetailsResponse
-    where TCreateRequest : CreateRequest
-    where TUpdateRequest : UpdateRequest
+    where TGetDetailsResponse : GetDetailsResponseBase
+    where TCreateRequest : CreateRequestBase
+    where TUpdateRequest : UpdateRequestBase
 {
     private readonly ICrudRepo<TEntity> _repo;
 
@@ -36,7 +36,7 @@ public abstract class CrudApiController< //todo: in progress
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<GetDetailsResponse>> GetDetails(GetDetailsRequest request)
+    public async Task<ActionResult<GetDetailsResponseBase>> GetDetails(GetDetailsRequest request)
     {
         TEntity? entity = await _repo.GetAsync(request.Id);
 

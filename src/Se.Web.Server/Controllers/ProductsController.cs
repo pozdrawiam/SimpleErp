@@ -88,7 +88,7 @@ public class ProductsController : AppApiController
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteMany(ProductDeleteRequest request)
+    public async Task<IActionResult> DeleteMany(DeleteManyRequest request)
     {
         if (!ModelState.IsValid) 
             return BadRequest(ModelState);

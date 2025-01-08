@@ -1,3 +1,5 @@
-﻿namespace Se.Web.Server.Dto.Products;
+﻿using Se.Web.Server.Dto.Crud;
 
-public record ProductGetDetailsRequest : IdRequestBase;
+namespace Se.Web.Server.Dto.Products;
+
+public record ProductGetDetailsRequest(int Id) : GetDetailsRequest(Id);

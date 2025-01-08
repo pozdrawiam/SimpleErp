@@ -108,7 +108,7 @@ public class ProductsControllerTests
         var entity = new ProductEntity { Id = id, Name = "Old Name" };
         _repo.GetAsync(id).Returns(entity);
 
-        var request = new ProductUpdateRequest("Updated Name") { Id = id };
+        var request = new ProductUpdateRequest(id, "Updated Name");
 
         // Act
         var actionResult = (await _sut.Update(request))
@@ -127,7 +127,7 @@ public class ProductsControllerTests
         const int id = 1;
         _repo.GetAsync(id).Returns((ProductEntity?)null);
 
-        var request = new ProductUpdateRequest("Updated Name") { Id = id };
+        var request = new ProductUpdateRequest(id, "Updated Name");
 
         // Act
         var actionResult = await _sut.Update(request);
@@ -138,7 +138,7 @@ public class ProductsControllerTests
     [Fact]
     public async Task Update_ShouldReturnBadRequest_WhenModelIsInvalid()
     {
-        var request = new ProductUpdateRequest(null) { Id = 1 };
+        var request = new ProductUpdateRequest(1, null);
         _sut.ModelState.AddModelError("Name", "Required");
 
         // Act
@@ -150,7 +150,7 @@ public class ProductsControllerTests
     [Fact]
     public async Task DeleteMany_ShouldReturnNoContent()
     {
-        var request = new ProductDeleteRequest { Ids = [ 1, 2 ] };
+        var request = new DeleteManyRequest { Ids = [ 1, 2 ] };
 
         // Act
         var result = await _sut.DeleteMany(request);
