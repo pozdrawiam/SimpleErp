@@ -6,7 +6,6 @@ namespace Se.Web.Server.Base;
 
 public abstract class CrudApiController< //todo: in progress
     TEntity,
-    TGetAllRequest, TGetAllResponse,
     TGetDetailsResponse,
     TCreateRequest,
     TUpdateRequest
@@ -28,7 +27,7 @@ public abstract class CrudApiController< //todo: in progress
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<TGetAllResponse>> GetAll(TGetAllRequest request)
+    public async Task<ActionResult<GetAllResponse>> GetAll(GetAllRequest request)
     {
         throw new NotImplementedException();
     }
