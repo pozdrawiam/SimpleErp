@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Se.Application.Base.Database.GetAll;
 using Se.Application.Features.Products;
 using Se.Domain.Features.Products;
 using Se.Web.Server.Base;
@@ -19,10 +20,12 @@ public class ProductsController : AppApiController
     #region Read
     
     [HttpGet]
-    public async Task<IEnumerable<ProductDetails>> GetAll()
+    public async Task<GetAllResponse> GetAll(GetAllRequest request) //todo 
     {
-        return (await _repo.GetAllAsync())
-            .Select(MapToDetails);
+        var dto = default(GetAllDto);
+        var result = await _repo.GetAllAsync(dto);
+        
+        return default;
     }
 
     [HttpGet]

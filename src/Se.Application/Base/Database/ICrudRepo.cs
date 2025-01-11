@@ -1,9 +1,11 @@
-﻿namespace Se.Application.Base.Database;
+﻿using Se.Application.Base.Database.GetAll;
+
+namespace Se.Application.Base.Database;
 
 public interface ICrudRepo<TEntity>
 {
     Task<TEntity?> GetAsync(int id);
-    Task<IEnumerable<TEntity>> GetAllAsync();
+    Task<GetAllResult> GetAllAsync(GetAllDto query);
 
     Task<int> AddAsync(TEntity entity);
     Task UpdateAsync(TEntity entity);
