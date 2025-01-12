@@ -1,4 +1,5 @@
-﻿using Se.Application.Features.Products;
+﻿using Se.Application.Base.Database.GetAll;
+using Se.Application.Features.Products;
 using Se.Domain.Features.Products;
 
 namespace Se.Database.Repositories;
@@ -28,6 +29,74 @@ public class ProductMemoryRepo : IProductRepo
         var product = Repo.FirstOrDefault(p => p.Id == id);
 
         return Task.FromResult(product);
+    }
+
+    public Task<GetAllResult> GetAllAsync(GetAllDto query)
+    {
+        IEnumerable<ProductEntity> filteredRepo = Repo;
+
+        foreach (var filter in query.Filters)
+        {
+            filteredRepo = filter.Operator switch
+            {
+                GetAllFilterOperator.Equals => filteredRepo.Where(p =>
+                    GetPropertyValue(p, filter.Column)?.ToString() == filter.Value),
+
+                GetAllFilterOperator.NotEquals => filteredRepo.Where(p =>
+                    GetPropertyValue(p, filter.Column)?.ToString() != filter.Value),
+
+                GetAllFilterOperator.GreaterThan => filteredRepo.Where(p =>
+                    double.TryParse(GetPropertyValue(p, filter.Column)?.ToString(), out var val) && val > double.Parse(filter.Value)),
+
+                GetAllFilterOperator.GreaterThanOrEqual => filteredRepo.Where(p =>
+                    double.TryParse(GetPropertyValue(p, filter.Column)?.ToString(), out var val) && val >= double.Parse(filter.Value)),
+
+                GetAllFilterOperator.LessThan => filteredRepo.Where(p =>
+                    double.TryParse(GetPropertyValue(p, filter.Column)?.ToString(), out var val) && val < double.Parse(filter.Value)),
+
+                GetAllFilterOperator.LessThanOrEqual => filteredRepo.Where(p =>
+                    double.TryParse(GetPropertyValue(p, filter.Column)?.ToString(), out var val) && val <= double.Parse(filter.Value)),
+
+                GetAllFilterOperator.Empty => filteredRepo.Where(p =>
+                    string.IsNullOrEmpty(GetPropertyValue(p, filter.Column)?.ToString())),
+
+                GetAllFilterOperator.NotEmpty => filteredRepo.Where(p =>
+                    !string.IsNullOrEmpty(GetPropertyValue(p, filter.Column)?.ToString())),
+
+                _ => filteredRepo
+            };
+        }
+
+        // Zastosuj sortowanie
+        if (!string.IsNullOrEmpty(query.SortBy))
+        {
+            filteredRepo = query.SortDesc
+                ? filteredRepo.OrderByDescending(p => GetPropertyValue(p, query.SortBy))
+                : filteredRepo.OrderBy(p => GetPropertyValue(p, query.SortBy));
+        }
+
+        // Zastosuj paginację
+        var paginatedRepo = filteredRepo
+            .Skip((query.PageNumber - 1) * query.PageSize)
+            .Take(query.PageSize)
+            .ToList();
+
+        // Przygotuj wynik
+        var resultData = paginatedRepo
+            .Select(p => query.Columns.ToDictionary(
+                column => column,
+                column => new[] { GetPropertyValue(p, column)?.ToString() ?? string.Empty }
+            ))
+            .ToArray();
+
+        return Task.FromResult(new GetAllResult(resultData));
+
+        // Zastosuj filtrowanie
+        object? GetPropertyValue(object obj, string propertyName)
+        {
+            var property = obj.GetType().GetProperty(propertyName);
+            return property?.GetValue(obj);
+        }
     }
 
     public Task<IEnumerable<ProductEntity>> GetAllAsync()

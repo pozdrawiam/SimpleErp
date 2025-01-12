@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
+using Se.Application.Base.Database.GetAll;
 using Se.Application.Features.Products;
 using Se.Domain.Features.Products;
 using Se.Web.Server.Controllers;
@@ -22,14 +23,26 @@ public class ProductsControllerTests
     [Fact]
     public async Task GetAll_ShouldReturnResponse()
     {
-        _repo.GetAllAsync()
-            .Returns([new ProductEntity(), new ProductEntity()]);
+        var query = new GetAllDto(new[] { "Id" }, "Id", false, 5, 1, new GetAllFilter[0]);
+        _repo.GetAllAsync(Arg.Any<GetAllDto>())
+            .Returns(new GetAllResult(new IDictionary<string, string[]>[]
+            {
+                new Dictionary<string, string[]>
+                { 
+                    { "Id", ["123"] }
+                },
+                new Dictionary<string, string[]>
+                { 
+                    { "Id", ["456"] }
+                }
+            }));
+        
+        var request = new GetAllRequest(query.Columns, query.SortBy, query.SortDesc, query.PageSize, query.PageNumber, new Filter[0]);
             
         // Act
-        var result = (await _sut.GetAll())
-            .ToArray();
+        var result = (await _sut.GetAll(request));
         
-        Assert.Equal(2, result.Length);
+        Assert.Equal(2, result.Data.Length);
     }
     
     [Fact]

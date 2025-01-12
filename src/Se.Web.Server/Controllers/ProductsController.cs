@@ -22,10 +22,11 @@ public class ProductsController : AppApiController
     [HttpGet]
     public async Task<GetAllResponse> GetAll(GetAllRequest request) //todo 
     {
-        var dto = default(GetAllDto);
+        var dto = new GetAllDto(request.Columns, request.SortBy, request.SortDesc, request.PageSize, request.PageNumber, new GetAllFilter[0]);
         var result = await _repo.GetAllAsync(dto);
+        var response = new GetAllResponse(result.Data);
         
-        return default;
+        return response;
     }
 
     [HttpGet]
