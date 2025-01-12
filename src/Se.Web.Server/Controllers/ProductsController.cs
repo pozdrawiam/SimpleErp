@@ -9,7 +9,6 @@ using Se.Web.Server.Dto.Crud.GetAll;
 using Se.Web.Server.Dto.Crud.GetDetails;
 using Se.Web.Server.Dto.Crud.Update;
 using Se.Web.Server.Dto.Products;
-using GetAllFilter = Se.Application.Base.Database.GetAll.GetAllFilter;
 
 namespace Se.Web.Server.Controllers;
 
@@ -27,7 +26,7 @@ public class ProductsController : AppApiController
     [HttpGet]
     public async Task<GetAllResponse> GetAll(GetAllRequest request) //todo 
     {
-        var dto = new GetAllDto(request.Columns, request.SortBy, request.SortDesc, request.PageSize, request.PageNumber, new GetAllFilter[0]);
+        var dto = new GetAllDto(request.Columns, request.SortBy, request.SortDesc, request.PageSize, request.PageNumber, new GetAllFilterDto[0]);
         var result = await _repo.GetAllAsync(dto);
         var response = new GetAllResponse(result.Data);
         

@@ -31,7 +31,7 @@ public class ProductMemoryRepo : IProductRepo
         return Task.FromResult(product);
     }
 
-    public Task<GetAllResult> GetAllAsync(GetAllDto query)
+    public Task<GetAllResultDto> GetAllAsync(GetAllDto query)
     {
         IEnumerable<ProductEntity> filteredRepo = Repo;
 
@@ -86,7 +86,7 @@ public class ProductMemoryRepo : IProductRepo
             )
             .ToArray();
 
-        return Task.FromResult(new GetAllResult(resultData));
+        return Task.FromResult(new GetAllResultDto(resultData));
         
         object? GetPropertyValue(object obj, string propertyName)
         {

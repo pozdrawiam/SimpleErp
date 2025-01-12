@@ -29,7 +29,7 @@ public class ProductsControllerTests
     {
         var query = new GetAllDto(["Id"], "Id", false, 5, 1, []);
         _repo.GetAllAsync(Arg.Any<GetAllDto>())
-            .Returns(new GetAllResult(new string[][]
+            .Returns(new GetAllResultDto(new string[][]
             {
                 ["123"],
                 ["456"]
