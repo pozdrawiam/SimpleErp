@@ -9,6 +9,7 @@ using Se.Web.Server.Dto.Crud.GetAll;
 using Se.Web.Server.Dto.Crud.GetDetails;
 using Se.Web.Server.Dto.Crud.Update;
 using Se.Web.Server.Dto.Products;
+using GetAllFilter = Se.Application.Base.Database.GetAll.GetAllFilter;
 
 namespace Se.Web.Server.Controllers;
 

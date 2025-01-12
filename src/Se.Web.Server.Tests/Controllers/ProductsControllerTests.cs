@@ -10,6 +10,7 @@ using Se.Web.Server.Dto.Crud.GetAll;
 using Se.Web.Server.Dto.Crud.GetDetails;
 using Se.Web.Server.Dto.Crud.Update;
 using Se.Web.Server.Dto.Products;
+using GetAllFilter = Se.Web.Server.Dto.Crud.GetAll.GetAllFilter;
 
 namespace Se.Web.Server.Tests.Controllers;
 
@@ -27,7 +28,7 @@ public class ProductsControllerTests
     [Fact]
     public async Task GetAll_ShouldReturnResponse()
     {
-        var query = new GetAllDto(new[] { "Id" }, "Id", false, 5, 1, new GetAllFilter[0]);
+        var query = new GetAllDto(new[] { "Id" }, "Id", false, 5, 1, new Application.Base.Database.GetAll.GetAllFilter[0]);
         _repo.GetAllAsync(Arg.Any<GetAllDto>())
             .Returns(new GetAllResult(new IDictionary<string, string[]>[]
             {
@@ -41,7 +42,7 @@ public class ProductsControllerTests
                 }
             }));
         
-        var request = new GetAllRequest(query.Columns, query.SortBy, query.SortDesc, query.PageSize, query.PageNumber, new Filter[0]);
+        var request = new GetAllRequest(query.Columns, query.SortBy, query.SortDesc, query.PageSize, query.PageNumber, new GetAllFilter[0]);
             
         // Act
         var result = (await _sut.GetAll(request));
