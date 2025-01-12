@@ -1,4 +1,4 @@
-﻿using Se.Web.Server.Dto.Crud;
+﻿using Se.Web.Server.Dto.Crud.GetDetails;
 
 namespace Se.Web.Server.Dto.Products;
 

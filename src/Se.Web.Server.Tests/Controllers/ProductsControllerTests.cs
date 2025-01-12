@@ -4,7 +4,11 @@ using Se.Application.Base.Database.GetAll;
 using Se.Application.Features.Products;
 using Se.Domain.Features.Products;
 using Se.Web.Server.Controllers;
-using Se.Web.Server.Dto.Crud;
+using Se.Web.Server.Dto.Crud.Create;
+using Se.Web.Server.Dto.Crud.DeleteMany;
+using Se.Web.Server.Dto.Crud.GetAll;
+using Se.Web.Server.Dto.Crud.GetDetails;
+using Se.Web.Server.Dto.Crud.Update;
 using Se.Web.Server.Dto.Products;
 
 namespace Se.Web.Server.Tests.Controllers;

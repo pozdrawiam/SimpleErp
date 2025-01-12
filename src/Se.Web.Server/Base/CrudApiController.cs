@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Se.Application.Base.Database;
-using Se.Web.Server.Dto.Crud;
+using Se.Web.Server.Dto.Crud.Create;
+using Se.Web.Server.Dto.Crud.DeleteMany;
+using Se.Web.Server.Dto.Crud.GetAll;
+using Se.Web.Server.Dto.Crud.GetDetails;
+using Se.Web.Server.Dto.Crud.Update;
 
 namespace Se.Web.Server.Base;
 
