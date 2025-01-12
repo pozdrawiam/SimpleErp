@@ -66,32 +66,28 @@ public class ProductMemoryRepo : IProductRepo
                 _ => filteredRepo
             };
         }
-
-        // Zastosuj sortowanie
+        
         if (!string.IsNullOrEmpty(query.SortBy))
         {
             filteredRepo = query.SortDesc
                 ? filteredRepo.OrderByDescending(p => GetPropertyValue(p, query.SortBy))
                 : filteredRepo.OrderBy(p => GetPropertyValue(p, query.SortBy));
         }
-
-        // Zastosuj paginację
+        
         var paginatedRepo = filteredRepo
             .Skip((query.PageNumber - 1) * query.PageSize)
             .Take(query.PageSize)
             .ToList();
-
-        // Przygotuj wynik
+        
         var resultData = paginatedRepo
-            .Select(p => query.Columns.ToDictionary(
-                column => column,
-                column => new[] { GetPropertyValue(p, column)?.ToString() ?? string.Empty }
-            ))
+            .Select(p => query.Columns
+                .Select(column => GetPropertyValue(p, column)?.ToString() ?? string.Empty)
+                .ToArray()
+            )
             .ToArray();
 
         return Task.FromResult(new GetAllResult(resultData));
-
-        // Zastosuj filtrowanie
+        
         object? GetPropertyValue(object obj, string propertyName)
         {
             var property = obj.GetType().GetProperty(propertyName);
