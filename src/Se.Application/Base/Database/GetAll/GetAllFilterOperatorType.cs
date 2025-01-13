@@ -1,6 +1,6 @@
 ﻿namespace Se.Application.Base.Database.GetAll;
 
-public enum GetAllFilterOperator
+public enum GetAllFilterOperatorType
 {
     Equals,
     NotEquals,

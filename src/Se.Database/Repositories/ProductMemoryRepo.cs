@@ -31,7 +31,7 @@ public class ProductMemoryRepo : IProductRepo
         return Task.FromResult(product);
     }
 
-    public Task<GetAllResultDto> GetAllAsync(GetAllDto query)
+    public Task<GetAllResultDto> GetAllAsync(GetAllArgsDto query)
     {
         IEnumerable<ProductEntity> filteredRepo = Repo;
 
@@ -39,28 +39,28 @@ public class ProductMemoryRepo : IProductRepo
         {
             filteredRepo = filter.Operator switch
             {
-                GetAllFilterOperator.Equals => filteredRepo.Where(p =>
+                GetAllFilterOperatorType.Equals => filteredRepo.Where(p =>
                     GetPropertyValue(p, filter.Column)?.ToString() == filter.Value),
 
-                GetAllFilterOperator.NotEquals => filteredRepo.Where(p =>
+                GetAllFilterOperatorType.NotEquals => filteredRepo.Where(p =>
                     GetPropertyValue(p, filter.Column)?.ToString() != filter.Value),
 
-                GetAllFilterOperator.GreaterThan => filteredRepo.Where(p =>
+                GetAllFilterOperatorType.GreaterThan => filteredRepo.Where(p =>
                     double.TryParse(GetPropertyValue(p, filter.Column)?.ToString(), out var val) && val > double.Parse(filter.Value)),
 
-                GetAllFilterOperator.GreaterThanOrEqual => filteredRepo.Where(p =>
+                GetAllFilterOperatorType.GreaterThanOrEqual => filteredRepo.Where(p =>
                     double.TryParse(GetPropertyValue(p, filter.Column)?.ToString(), out var val) && val >= double.Parse(filter.Value)),
 
-                GetAllFilterOperator.LessThan => filteredRepo.Where(p =>
+                GetAllFilterOperatorType.LessThan => filteredRepo.Where(p =>
                     double.TryParse(GetPropertyValue(p, filter.Column)?.ToString(), out var val) && val < double.Parse(filter.Value)),
 
-                GetAllFilterOperator.LessThanOrEqual => filteredRepo.Where(p =>
+                GetAllFilterOperatorType.LessThanOrEqual => filteredRepo.Where(p =>
                     double.TryParse(GetPropertyValue(p, filter.Column)?.ToString(), out var val) && val <= double.Parse(filter.Value)),
 
-                GetAllFilterOperator.Empty => filteredRepo.Where(p =>
+                GetAllFilterOperatorType.Empty => filteredRepo.Where(p =>
                     string.IsNullOrEmpty(GetPropertyValue(p, filter.Column)?.ToString())),
 
-                GetAllFilterOperator.NotEmpty => filteredRepo.Where(p =>
+                GetAllFilterOperatorType.NotEmpty => filteredRepo.Where(p =>
                     !string.IsNullOrEmpty(GetPropertyValue(p, filter.Column)?.ToString())),
 
                 _ => filteredRepo

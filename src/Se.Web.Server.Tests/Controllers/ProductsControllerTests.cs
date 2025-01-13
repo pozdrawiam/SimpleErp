@@ -27,8 +27,8 @@ public class ProductsControllerTests
     [Fact]
     public async Task GetAll_ShouldReturnResponse()
     {
-        var query = new GetAllDto(["Id"], "Id", false, 5, 1, []);
-        _repo.GetAllAsync(Arg.Any<GetAllDto>())
+        var query = new GetAllArgsDto(["Id"], "Id", false, 5, 1, []);
+        _repo.GetAllAsync(Arg.Any<GetAllArgsDto>())
             .Returns(new GetAllResultDto(new string[][]
             {
                 ["123"],

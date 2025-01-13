@@ -1,3 +1,3 @@
 ﻿namespace Se.Application.Base.Database.GetAll;
 
-public record GetAllFilterDto(string Column, GetAllFilterOperator Operator, string Value);
+public record GetAllFilterDto(string Column, GetAllFilterOperatorType Operator, string Value);

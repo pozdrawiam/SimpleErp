@@ -26,7 +26,7 @@ public class ProductsController : AppApiController
     [HttpGet]
     public async Task<GetAllResponse> GetAll(GetAllRequest request) //todo 
     {
-        var dto = new GetAllDto(request.Columns, request.SortBy, request.SortDesc, request.PageSize, request.PageNumber, new GetAllFilterDto[0]);
+        var dto = new GetAllArgsDto(request.Columns, request.SortBy, request.SortDesc, request.PageSize, request.PageNumber, new GetAllFilterDto[0]);
         var result = await _repo.GetAllAsync(dto);
         var response = new GetAllResponse(result.Data);
         
