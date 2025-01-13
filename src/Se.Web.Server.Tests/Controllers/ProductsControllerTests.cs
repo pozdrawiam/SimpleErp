@@ -38,9 +38,15 @@ public class ProductsControllerTests
         var request = new GetAllRequest(query.Columns, query.SortBy, query.SortDesc, query.PageSize, query.PageNumber, []);
 
         // Act
-        var result = (await _sut.GetAll(request));
+        var result = (await _sut.GetAll(request))
+            .Result as OkObjectResult;
+        
+        Assert.NotNull(result);
 
-        Assert.Equal(2, result.Data.Length);
+        var response = result.Value as GetAllResponse;
+
+        Assert.NotNull(response);
+        Assert.Equal(2, response.Data.Length);
     }
 
     [Fact]
