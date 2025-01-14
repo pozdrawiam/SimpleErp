@@ -89,7 +89,6 @@ public abstract class CrudApiController< //todo: in progress
     [HttpDelete]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<DeleteManyResponse>> DeleteMany(DeleteManyRequest request)
     {
         if (!ModelState.IsValid) 
