@@ -112,7 +112,8 @@ public class ProductsController : AppApiController
         if (!ModelState.IsValid) 
             return BadRequest(ModelState);
         
-        await _repo.DeleteManyAsync(request.Ids!);
+        if (request.Ids?.Count > 0)
+            await _repo.DeleteManyAsync(request.Ids);
         
         return NoContent();
     }
