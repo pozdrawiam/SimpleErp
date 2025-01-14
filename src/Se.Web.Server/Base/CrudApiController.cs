@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Se.Application.Base.Database;
+using Se.Application.Base.Database.GetAll;
 using Se.Web.Server.Dto.Crud.Create;
 using Se.Web.Server.Dto.Crud.DeleteMany;
 using Se.Web.Server.Dto.Crud.GetAll;
@@ -33,7 +34,20 @@ public abstract class CrudApiController< //todo: in progress
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<GetAllResponse>> GetAll(GetAllRequest request)
     {
-        throw new NotImplementedException();
+        if (!ModelState.IsValid) 
+            return BadRequest();
+        
+        var filters = request.Filters
+            .Select(x => new GetAllFilterDto(x.Column, (GetAllFilterOperatorType)x.Operator, x.Value))
+            .ToArray();
+        var argsDto = new GetAllArgsDto(request.Columns, request.SortBy, request.SortDesc, 
+            request.PageSize, request.PageNumber, filters);
+        
+        var result = await _repo.GetAllAsync(argsDto);
+        
+        var response = new GetAllResponse(result.Data);
+        
+        return Ok(response);
     }
     
     [HttpGet]
