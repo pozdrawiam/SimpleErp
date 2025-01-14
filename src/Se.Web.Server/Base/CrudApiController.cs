@@ -92,7 +92,13 @@ public abstract class CrudApiController< //todo: in progress
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<DeleteManyResponse>> DeleteMany(DeleteManyRequest request)
     {
-        throw new NotImplementedException();
+        if (!ModelState.IsValid) 
+            return BadRequest(ModelState);
+        
+        if (request.Ids?.Count > 0)
+            await _repo.DeleteManyAsync(request.Ids);
+        
+        return NoContent();
     }
     
     #endregion
