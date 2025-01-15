@@ -74,7 +74,13 @@ public abstract class CrudApiController< //todo: in progress
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<CreateResponse>> Create(TCreateRequest request)
     {
-        throw new NotImplementedException();
+        if (!ModelState.IsValid) 
+            return BadRequest();
+        
+        var entity = MapCreateRequestToEntity(request);
+        int id = await _repo.AddAsync(entity);
+            
+        return Ok(new CreateResponse(id));
     }
 
     [HttpPut]
@@ -83,7 +89,18 @@ public abstract class CrudApiController< //todo: in progress
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<UpdateResponse>> Update(TUpdateRequest request)
     {
-        throw new NotImplementedException();
+        if (!ModelState.IsValid) 
+            return BadRequest();
+        
+        var entity = await _repo.GetAsync(request.Id);
+        
+        if (entity is null)
+            return NotFound();
+        
+        UpdateEntityByUpdateRequest(entity, request);
+        await _repo.UpdateAsync(entity);
+        
+        return Ok(new UpdateResponse());
     }
 
     [HttpDelete]
@@ -103,4 +120,8 @@ public abstract class CrudApiController< //todo: in progress
     #endregion
 
     protected abstract TGetDetailsResponse MapEntityToGetDetailsResponse(TEntity product);
+    
+    protected abstract TEntity MapCreateRequestToEntity(TCreateRequest request);
+    
+    protected abstract void UpdateEntityByUpdateRequest(TEntity entity, TUpdateRequest request);
 }
