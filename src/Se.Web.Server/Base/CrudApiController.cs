@@ -60,7 +60,7 @@ public abstract class CrudApiController< //todo: in progress
         if (entity == null)
             return NotFound();
 
-        var response = MapEntityToDetailsResponse(entity);
+        var response = MapEntityToGetDetailsResponse(entity);
 
         return Ok(response);
     }
@@ -102,5 +102,5 @@ public abstract class CrudApiController< //todo: in progress
     
     #endregion
 
-    protected abstract TGetDetailsResponse MapEntityToDetailsResponse(TEntity product);
+    protected abstract TGetDetailsResponse MapEntityToGetDetailsResponse(TEntity product);
 }
