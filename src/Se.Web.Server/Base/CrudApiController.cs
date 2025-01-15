@@ -9,7 +9,7 @@ using Se.Web.Server.Dto.Crud.Update;
 
 namespace Se.Web.Server.Base;
 
-public abstract class CrudApiController< //todo: in progress
+public abstract class CrudApiController<
     TEntity,
     TGetDetailsResponse,
     TCreateRequest,
@@ -35,7 +35,7 @@ public abstract class CrudApiController< //todo: in progress
     public async Task<ActionResult<GetAllResponse>> GetAll(GetAllRequest request)
     {
         if (!ModelState.IsValid) 
-            return BadRequest();
+            return BadRequest(ModelState);
         
         var filters = request.Filters
             .Select(x => new GetAllFilterDto(x.Column, (GetAllFilterOperatorType)x.Operator, x.Value))
@@ -75,7 +75,7 @@ public abstract class CrudApiController< //todo: in progress
     public async Task<ActionResult<CreateResponse>> Create(TCreateRequest request)
     {
         if (!ModelState.IsValid) 
-            return BadRequest();
+            return BadRequest(ModelState);
         
         var entity = MapCreateRequestToEntity(request);
         int id = await _repo.AddAsync(entity);
@@ -90,7 +90,7 @@ public abstract class CrudApiController< //todo: in progress
     public async Task<ActionResult<UpdateResponse>> Update(TUpdateRequest request)
     {
         if (!ModelState.IsValid) 
-            return BadRequest();
+            return BadRequest(ModelState);
         
         var entity = await _repo.GetAsync(request.Id);
         
