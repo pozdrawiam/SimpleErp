@@ -45,7 +45,7 @@ public class ProductsController : AppApiController
     }
 
     [HttpGet]
-    [ProducesResponseType(typeof(ProductDetails), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ProductGetDetailsResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetDetails(GetDetailsRequest request)
     {
@@ -122,9 +122,9 @@ public class ProductsController : AppApiController
 
     #region Shared
 
-    private ProductDetails MapToDetails(ProductEntity entity)
+    private ProductGetDetailsResponse MapToDetails(ProductEntity entity)
     {
-        return new ProductDetails(entity.Id, entity.Name);
+        return new ProductGetDetailsResponse(entity.Id, entity.Name);
     }
 
     #endregion

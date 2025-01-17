@@ -65,7 +65,7 @@ public class ProductsControllerTests
         Assert.NotNull(response);
         Assert.Equal(200, response.StatusCode);
 
-        ProductDetails? result = response.Value as ProductDetails;
+        ProductGetDetailsResponse? result = response.Value as ProductGetDetailsResponse;
 
         Assert.NotNull(result);
         Assert.Equal(id, result.Id);
