@@ -31,9 +31,11 @@ public class ProductsController : AppApiController
         if (!ModelState.IsValid) 
             return BadRequest();
         
-        var filters = request.Filters
+        var filters = request.Filters?
             .Select(x => new GetAllFilterDto(x.Column, (GetAllFilterOperatorType)x.Operator, x.Value))
-            .ToArray();
+            .ToArray()
+            ?? [];
+        
         var argsDto = new GetAllArgsDto(request.Columns, request.SortBy, request.SortDesc, 
             request.PageSize, request.PageNumber, filters);
         

@@ -32,14 +32,16 @@ public abstract class CrudApiController<
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<GetAllResponse>> GetAll(GetAllRequest request)
+    public async Task<ActionResult<GetAllResponse>> GetAll([FromQuery] GetAllRequest request)
     {
         if (!ModelState.IsValid) 
             return BadRequest(ModelState);
         
-        var filters = request.Filters
+        var filters = request.Filters?
             .Select(x => new GetAllFilterDto(x.Column, (GetAllFilterOperatorType)x.Operator, x.Value))
-            .ToArray();
+            .ToArray()
+            ?? [];
+        
         var argsDto = new GetAllArgsDto(request.Columns, request.SortBy, request.SortDesc, 
             request.PageSize, request.PageNumber, filters);
         
