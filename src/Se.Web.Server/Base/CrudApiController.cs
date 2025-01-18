@@ -116,7 +116,7 @@ public abstract class CrudApiController<
         if (request.Ids?.Count > 0)
             await _repo.DeleteManyAsync(request.Ids);
         
-        return NoContent();
+        return Ok(new DeleteManyResponse());
     }
     
     #endregion

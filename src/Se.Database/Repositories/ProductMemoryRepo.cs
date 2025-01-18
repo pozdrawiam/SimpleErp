@@ -125,7 +125,7 @@ public class ProductMemoryRepo : IProductRepo
     {
         var entities = Repo.Where(x => ids.Contains(x.Id));
 
-        foreach (var entity in entities)
+        foreach (var entity in entities.ToArray())
         {
             Repo.Remove(entity);
         }
