@@ -1,133 +1,24 @@
-using Microsoft.AspNetCore.Mvc;
-using Se.Application.Base.Database.GetAll;
-using Se.Application.Features.Products;
+﻿using Se.Application.Features.Products;
 using Se.Domain.Features.Products;
 using Se.Web.Server.Base;
-using Se.Web.Server.Dto.Crud.Create;
-using Se.Web.Server.Dto.Crud.DeleteMany;
-using Se.Web.Server.Dto.Crud.GetAll;
-using Se.Web.Server.Dto.Crud.GetDetails;
-using Se.Web.Server.Dto.Crud.Update;
 using Se.Web.Server.Dto.Products;
 
 namespace Se.Web.Server.Controllers;
 
-public class ProductsController : AppApiController
+public class ProductsController : CrudApiController<ProductEntity, ProductGetDetailsResponse, ProductCreateRequest, ProductUpdateRequest>
 {
-    private readonly IProductRepo _repo;
-
-    public ProductsController(IProductRepo repo)
+    public ProductsController(IProductRepo repo) : base(repo)
     {
-        _repo = repo;
-    }
-    
-    #region Read
-    
-    [HttpGet]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<GetAllResponse>> GetAll(GetAllRequest request)
-    {
-        if (!ModelState.IsValid) 
-            return BadRequest();
-        
-        var filters = request.Filters?
-            .Select(x => new GetAllFilterDto(x.Column, (GetAllFilterOperatorType)x.Operator, x.Value))
-            .ToArray()
-            ?? [];
-        
-        var argsDto = new GetAllArgsDto(request.Columns, request.SortBy, request.SortDesc, 
-            request.PageSize, request.PageNumber, filters);
-        
-        var result = await _repo.GetAllAsync(argsDto);
-        
-        var response = new GetAllResponse(result.Data);
-        
-        return Ok(response);
     }
 
-    [HttpGet]
-    [ProducesResponseType(typeof(ProductGetDetailsResponse), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetDetails(GetDetailsRequest request)
+    protected override ProductGetDetailsResponse MapEntityToGetDetailsResponse(ProductEntity product) => 
+        new(product.Id, product.Name);
+
+    protected override ProductEntity MapCreateRequestToEntity(ProductCreateRequest request) => 
+        new() { Name = request.Name! };
+
+    protected override void UpdateEntityByUpdateRequest(ProductEntity entity, ProductUpdateRequest request)
     {
-        var product = await _repo.GetAsync(request.Id);
-
-        if (product is null)
-            return NotFound();
-
-        var details = MapToDetails(product);
-        
-        return Ok(details);
+        entity.Name = request.Name!;
     }
-    
-    #endregion
-
-    #region Write
-    
-    [HttpPost]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<CreateResponse>> Create(ProductCreateRequest request)
-    {
-        if (!ModelState.IsValid) 
-            return BadRequest();
-        
-        var product = new ProductEntity
-        {
-            Id = DateTime.Now.Microsecond,
-            Name = request.Name!
-        };
-        
-        int id = await _repo.AddAsync(product);
-            
-        return Ok(new CreateResponse(id));
-    }
-
-    [HttpPut]
-    [ProducesResponseType(StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<UpdateResponse>> Update(ProductUpdateRequest request)
-    {
-        if (!ModelState.IsValid) 
-            return BadRequest();
-        
-        var product = _repo.GetAsync(request.Id).Result;
-        
-        if (product is null)
-            return NotFound();
-        
-        product.Name = request.Name!;
-        
-        await _repo.UpdateAsync(product);
-        
-        return Ok(new UpdateResponse());
-    }
-    
-    [HttpDelete]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> DeleteMany(DeleteManyRequest request)
-    {
-        if (!ModelState.IsValid) 
-            return BadRequest(ModelState);
-        
-        if (request.Ids?.Count > 0)
-            await _repo.DeleteManyAsync(request.Ids);
-        
-        return NoContent();
-    }
-    
-    #endregion
-
-    #region Shared
-
-    private ProductGetDetailsResponse MapToDetails(ProductEntity entity)
-    {
-        return new ProductGetDetailsResponse(entity.Id, entity.Name);
-    }
-
-    #endregion
 }

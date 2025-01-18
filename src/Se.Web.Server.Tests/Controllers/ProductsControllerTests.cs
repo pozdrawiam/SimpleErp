@@ -59,8 +59,8 @@ public class ProductsControllerTests
         var request = new GetDetailsRequest(id);
 
         // Act
-        var response = await _sut.GetDetails(request)
-            as OkObjectResult;
+        var response = (await _sut.GetDetails(request))
+            .Result as OkObjectResult;
 
         Assert.NotNull(response);
         Assert.Equal(200, response.StatusCode);
@@ -80,8 +80,8 @@ public class ProductsControllerTests
         var request = new GetDetailsRequest(id);
 
         // Act
-        NotFoundResult? response = await _sut.GetDetails(request)
-            as NotFoundResult;
+        NotFoundResult? response = (await _sut.GetDetails(request))
+            .Result as NotFoundResult;
 
         Assert.NotNull(response);
         Assert.Equal(404, response.StatusCode);
