@@ -115,7 +115,7 @@ public class ProductsControllerTests
         // Act
         var actionResult = await _sut.Create(request);
 
-        Assert.IsType<BadRequestResult>(actionResult.Result);
+        Assert.IsType<BadRequestObjectResult>(actionResult.Result);
     }
 
     [Fact]
@@ -161,17 +161,22 @@ public class ProductsControllerTests
         // Act
         var actionResult = await _sut.Update(request);
 
-        Assert.IsType<BadRequestResult>(actionResult.Result);
+        Assert.IsType<BadRequestObjectResult>(actionResult.Result);
     }
 
     [Fact]
-    public async Task DeleteMany_ShouldReturnNoContent()
+    public async Task DeleteMany_ShouldReturnOk()
     {
         var request = new DeleteManyRequest { Ids = [1, 2] };
 
         // Act
-        var result = await _sut.DeleteMany(request);
+        var actionResult = (await _sut.DeleteMany(request))
+            .Result as OkObjectResult;
 
-        Assert.IsType<NoContentResult>(result);
+        Assert.NotNull(actionResult);
+
+        var response = actionResult.Value as DeleteManyResponse;
+
+        Assert.NotNull(response);
     }
 }
