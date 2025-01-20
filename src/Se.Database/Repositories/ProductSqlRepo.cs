@@ -5,6 +5,7 @@ using Dapper;
 using Dapper.Contrib.Extensions;
 using Se.Application.Base.Database.GetAll;
 using Se.Application.Features.Products;
+using Se.Database.DbConnection;
 using Se.Domain.Features.Products;
 
 namespace Se.Database.Repositories;
@@ -35,7 +36,7 @@ public class ProductSqlRepo : IProductRepo
         sqlBuilder.Append(query.Columns.Length > 0
             ? string.Join(", ", query.Columns.Select(col => $"[{col}]"))
             : "*");
-        sqlBuilder.Append(" FROM [YourTableName]");
+        sqlBuilder.Append(" FROM [Products]");
 
         if (query.Filters.Length > 0)
         {
