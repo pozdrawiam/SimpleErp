@@ -42,7 +42,7 @@ public abstract class CrudApiController<
             .ToArray()
             ?? [];
         
-        var argsDto = new GetAllArgsDto(request.Columns, request.SortBy, request.SortDesc, 
+        var argsDto = new GetAllArgsDto(request.Columns ?? [], request.SortBy, request.SortDesc, 
             request.PageSize, request.PageNumber, filters);
         
         var result = await _repo.GetAllAsync(argsDto);
