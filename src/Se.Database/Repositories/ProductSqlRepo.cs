@@ -77,13 +77,13 @@ public class ProductSqlRepo : IProductRepo
 
         var data = await connection.QueryAsync(sqlBuilder.ToString(), parameters);
 
-        string[][] result = data.Select(row =>
+        object?[][] result = data.Select(row =>
         {
-            string[] values = query.Columns.Select(column => (string)(row[column]?.ToString() ?? string.Empty)).ToArray();
+            object?[] values = query.Columns.Select(column => row[column]).ToArray();
             return values;
         }).ToArray();
 
-        return new GetAllResultDto(result);
+        return new GetAllResultDto(result, 0);
     }
 
     public async Task<int> AddAsync(ProductEntity entity)

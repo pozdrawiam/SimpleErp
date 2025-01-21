@@ -47,7 +47,7 @@ public abstract class CrudApiController<
         
         var result = await _repo.GetAllAsync(argsDto);
         
-        var response = new GetAllResponse(result.Data);
+        var response = new GetAllResponse(result.Data, result.TotalCount);
         
         return Ok(response);
     }

@@ -79,14 +79,14 @@ public class ProductMemoryRepo : IProductRepo
             .Take(query.PageSize)
             .ToList();
         
-        var resultData = paginatedRepo
+        object?[][] resultData = paginatedRepo
             .Select(p => query.Columns
-                .Select(column => GetPropertyValue(p, column)?.ToString() ?? string.Empty)
+                .Select(column => GetPropertyValue(p, column))
                 .ToArray()
             )
             .ToArray();
 
-        return Task.FromResult(new GetAllResultDto(resultData));
+        return Task.FromResult(new GetAllResultDto(resultData, 0));
         
         object? GetPropertyValue(object obj, string propertyName)
         {
