@@ -77,9 +77,10 @@ public class ProductSqlRepo : IProductRepo
 
         var data = await connection.QueryAsync(sqlBuilder.ToString(), parameters);
 
-        object?[][] result = data.Select(row =>
+        object?[][] result = data.Select(x =>
         {
-            object?[] values = query.Columns.Select(column => row[column]).ToArray();
+            var row = (IDictionary<string, object>)x;
+            object?[] values = selectedColumns.Select(column => row[column]).ToArray();
             return values;
         }).ToArray();
 
