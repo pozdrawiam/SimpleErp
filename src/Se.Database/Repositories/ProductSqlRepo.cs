@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Reflection;
 using System.Text;
 using System.Transactions;
 using Dapper;
@@ -32,16 +33,22 @@ public class ProductSqlRepo : IProductRepo
     {
         using var connection = CreateOpenConnection();
 
+        var availableColumns = typeof(ProductEntity)
+            .GetProperties(BindingFlags.Instance | BindingFlags.Public)
+            .Select(property => property.Name).ToArray();
+
+        var selectedColumns = query.Columns.Length > 0 ? query.Columns.Where(x => availableColumns.Contains(x)).ToArray() : availableColumns;
+
         var sqlBuilder = new StringBuilder("SELECT ");
-        sqlBuilder.Append(query.Columns.Length > 0
-            ? string.Join(", ", query.Columns.Select(col => $"[{col}]"))
-            : "*");
+        sqlBuilder.Append(string.Join(", ", selectedColumns.Select(x => $"[{x}]")));
         sqlBuilder.Append(" FROM [Products]");
 
-        if (query.Filters.Length > 0)
+        var selectedFilters = query.Filters.Where(x => availableColumns.Contains(x.Column)).ToArray();
+
+        if (selectedFilters.Length > 0)
         {
             sqlBuilder.Append(" WHERE ");
-            sqlBuilder.Append(string.Join(" AND ", query.Filters.Select((filter, index) =>
+            sqlBuilder.Append(string.Join(" AND ", selectedFilters.Select((filter, index) =>
             {
                 var paramName = $"@param{index}";
                 return filter.Operator switch
@@ -59,15 +66,17 @@ public class ProductSqlRepo : IProductRepo
             })));
         }
 
-        if (!string.IsNullOrEmpty(query.SortBy))
+        if (!string.IsNullOrEmpty(query.SortBy) && availableColumns.Contains(query.SortBy))
         {
-            sqlBuilder.Append($" ORDER BY [{query.SortBy}] {(query.SortDesc ? "DESC" : "ASC")}");
+            var sortBy = availableColumns.First(x => x == query.SortBy);
+            
+            sqlBuilder.Append($" ORDER BY [{sortBy}] {(query.SortDesc ? "DESC" : "ASC")}");
         }
 
         sqlBuilder.Append(" OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY");
 
         var parameters = new DynamicParameters();
-        for (int i = 0; i < query.Filters.Length; i++)
+        for (int i = 0; i < selectedFilters.Length; i++)
         {
             parameters.Add($"@param{i}", query.Filters[i].Value);
         }
