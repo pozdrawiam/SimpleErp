@@ -67,14 +67,14 @@ public class ProductSqlRepo : IProductRepo
             })));
         }
 
-        if (!string.IsNullOrEmpty(query.SortBy) && availableColumns.Contains(query.SortBy))
-        {
-            var sortBy = availableColumns.First(x => x == query.SortBy);
-            
-            sqlBuilder.Append($" ORDER BY [{sortBy}] {(query.SortDesc ? "DESC" : "ASC")}");
-        }
-
-        sqlBuilder.Append(" OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY");
+        var sortBy = !string.IsNullOrEmpty(query.SortBy) && availableColumns.Contains(query.SortBy) ?
+            availableColumns.First(x => x == query.SortBy) :
+            nameof(ProductEntity.Id);
+        
+        sqlBuilder.Append
+        (
+            $" ORDER BY [{sortBy}] {(query.SortDesc ? "DESC" : "ASC")} OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY"
+        );
 
         var parameters = new DynamicParameters();
         for (int i = 0; i < selectedFilters.Length; i++)
