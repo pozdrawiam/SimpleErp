@@ -33,6 +33,7 @@ public class ProductSqlRepo : IProductRepo
     {
         using var connection = CreateOpenConnection();
 
+        var tableName = GetTableName();
         var availableColumns = typeof(ProductEntity)
             .GetProperties(BindingFlags.Instance | BindingFlags.Public)
             .Select(property => property.Name).ToArray();
@@ -41,7 +42,7 @@ public class ProductSqlRepo : IProductRepo
 
         var sqlBuilder = new StringBuilder("SELECT ");
         sqlBuilder.Append(string.Join(", ", selectedColumns.Select(x => $"[{x}]")));
-        sqlBuilder.Append(" FROM [Products]");
+        sqlBuilder.Append($" FROM [{tableName}]");
 
         var selectedFilters = query.Filters.Where(x => availableColumns.Contains(x.Column)).ToArray();
 
@@ -134,5 +135,18 @@ public class ProductSqlRepo : IProductRepo
         dbConnection.Open();
 
         return dbConnection;
+    }
+
+    private string GetTableName()
+    {
+        var type = typeof(ProductEntity);
+        
+        var tableAttribute = type
+            .GetCustomAttributes(typeof(System.ComponentModel.DataAnnotations.Schema.TableAttribute), inherit: false)
+            .FirstOrDefault() as System.ComponentModel.DataAnnotations.Schema.TableAttribute;
+        
+        var tableName = tableAttribute?.Name;
+        
+        return tableName ?? throw new InvalidOperationException($"No table name for type {type.FullName}");
     }
 }
