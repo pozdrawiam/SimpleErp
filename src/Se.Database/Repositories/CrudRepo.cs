@@ -46,10 +46,8 @@ public class CrudRepo<TEntity> : ICrudRepo<TEntity>
 
         var selectedFilters = query.Filters.Where(x => availableColumns.Contains(x.Column)).ToArray();
 
-        if (selectedFilters.Length > 0)
-        {
-            sqlBuilder.Append(" WHERE ");
-            sqlBuilder.Append(string.Join(" AND ", selectedFilters.Select((filter, index) =>
+        var whereClause = selectedFilters.Length > 0
+            ? " WHERE " + string.Join(" AND ", selectedFilters.Select((filter, index) =>
             {
                 var paramName = $"@param{index}";
                 return filter.Operator switch
@@ -64,17 +62,20 @@ public class CrudRepo<TEntity> : ICrudRepo<TEntity>
                     GetAllFilterOperatorType.NotEmpty => $"[{filter.Column}] IS NOT NULL",
                     _ => throw new NotSupportedException($"Operator {filter.Operator} is not supported")
                 };
-            })));
-        }
+            }))
+            : string.Empty;
+
+        sqlBuilder.Append(whereClause);
 
         var sortBy = !string.IsNullOrEmpty(query.SortBy) && availableColumns.Contains(query.SortBy) ?
             availableColumns.First(x => x == query.SortBy) :
             "Id";
-        
-        sqlBuilder.Append
-        (
+
+        sqlBuilder.Append(
             $" ORDER BY [{sortBy}] {(query.SortDesc ? "DESC" : "ASC")} OFFSET @Offset ROWS FETCH NEXT @PageSize ROWS ONLY"
         );
+
+        var countQuery = $"SELECT COUNT(*) FROM [{tableName}]{whereClause}";
 
         var parameters = new DynamicParameters();
         for (int i = 0; i < selectedFilters.Length; i++)
@@ -84,8 +85,12 @@ public class CrudRepo<TEntity> : ICrudRepo<TEntity>
 
         parameters.Add("@Offset", (query.PageNumber - 1) * query.PageSize);
         parameters.Add("@PageSize", query.PageSize);
-
-        var data = await connection.QueryAsync(sqlBuilder.ToString(), parameters);
+        
+        var totalCount = await connection.ExecuteScalarAsync<int>(countQuery, parameters);
+        
+        var data = totalCount > 0 ? 
+            await connection.QueryAsync(sqlBuilder.ToString(), parameters) :
+            Array.Empty<dynamic>();
 
         object?[][] result = data.Select(x =>
         {
@@ -94,8 +99,9 @@ public class CrudRepo<TEntity> : ICrudRepo<TEntity>
             return values;
         }).ToArray();
 
-        return new GetAllResultDto(result, 0);
+        return new GetAllResultDto(result, totalCount);
     }
+
 
     public async Task<int> AddAsync(TEntity entity)
     {
