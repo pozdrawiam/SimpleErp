@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Se.Application.Features.Products;
 using Se.Database.DbConnection;
 using Se.Database.Repositories;
+using Se.Domain.Features.Products;
 
 namespace Se.Database;
 
@@ -15,7 +15,7 @@ public static class AppModule
         
         services.AddSingleton<IDbConnectionFactory>(new SqlServerConnectionFactory(dbConnectionString));
         
-        services.AddTransient<IProductRepo, ProductSqlRepo>();
+        services.AddTransient<CrudRepo<ProductEntity>>();
         
         return services;
     }

@@ -1,4 +1,4 @@
-﻿using Se.Application.Features.Products;
+﻿using Se.Database.Repositories;
 using Se.Domain.Features.Products;
 using Se.Web.Server.Base;
 using Se.Web.Server.Dto.Products;
@@ -7,7 +7,7 @@ namespace Se.Web.Server.Controllers;
 
 public class ProductsController : CrudApiController<ProductEntity, ProductGetDetailsResponse, ProductCreateRequest, ProductUpdateRequest>
 {
-    public ProductsController(IProductRepo repo) : base(repo)
+    public ProductsController(CrudRepo<ProductEntity> repo) : base(repo)
     {
     }
 
