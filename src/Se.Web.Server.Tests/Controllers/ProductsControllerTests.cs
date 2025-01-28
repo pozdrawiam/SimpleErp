@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
+using Se.Application.Base.Database;
 using Se.Application.Base.Database.GetAll;
-using Se.Application.Features.Products;
 using Se.Domain.Features.Products;
 using Se.Web.Server.Controllers;
 using Se.Web.Server.Dto.Crud.Create;
@@ -17,7 +17,7 @@ public class ProductsControllerTests
 {
     private readonly ProductsController _sut;
 
-    private readonly IProductRepo _repo = Substitute.For<IProductRepo>();
+    private readonly ICrudRepo<ProductEntity> _repo = Substitute.For<ICrudRepo<ProductEntity>>();
 
     public ProductsControllerTests()
     {
