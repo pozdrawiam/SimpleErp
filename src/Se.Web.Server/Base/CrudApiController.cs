@@ -29,10 +29,10 @@ public abstract class CrudApiController<
 
     #region Read
 
-    [HttpGet]
+    [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<GetAllResponse>> GetAll([FromQuery] GetAllRequest request)
+    public async Task<ActionResult<GetAllResponse>> QueryAll(GetAllRequest request)
     {
         if (!ModelState.IsValid) 
             return BadRequest(ModelState);
