@@ -35,7 +35,15 @@ public class ProductsControllerTests
                 ["456"]
             }, 2));
 
-        var request = new GetAllRequest(query.Columns, query.SortBy, query.SortDesc, query.PageSize, query.PageNumber, []);
+        var request = new GetAllRequest
+        {
+            Columns = query.Columns,
+            SortBy = query.SortBy,
+            SortDesc = query.SortDesc,
+            PageSize = query.PageSize,
+            PageNumber = query.PageNumber,
+            Filters = []
+        };
 
         // Act
         var result = (await _sut.QueryAll(request))
