@@ -5,13 +5,13 @@ namespace Se.Web.Server.Dto.Crud.GetAll;
 public class GetAllRequest
 {
     [DefaultValue(null)]
-    public string[]? Columns { get; init; } = null;
+    public string[]? Columns { get; init; }
     
     [DefaultValue("")]
     public string SortBy { get; init; } = "";
     
     [DefaultValue(false)]
-    public bool SortDesc { get; init; } = false;
+    public bool SortDesc { get; init; }
     
     [DefaultValue(20)]
     public int PageSize { get; init; } = 20;
@@ -20,5 +20,5 @@ public class GetAllRequest
     public int PageNumber { get; init; } = 1;
     
     [DefaultValue(null)]
-    public GetAllFilter[]? Filters { get; init; } = null;
+    public GetAllFilter[]? Filters { get; init; }
 }
