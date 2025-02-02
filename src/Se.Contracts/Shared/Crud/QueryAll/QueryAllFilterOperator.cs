@@ -1,6 +1,6 @@
-﻿namespace Se.Contracts.Shared.Crud.GetAll;
+﻿namespace Se.Contracts.Shared.Crud.QueryAll;
 
-public enum GetAllFilterOperator
+public enum QueryAllFilterOperator
 {
     Equals,
     NotEquals,

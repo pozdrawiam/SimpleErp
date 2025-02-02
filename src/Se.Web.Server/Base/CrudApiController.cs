@@ -3,8 +3,8 @@ using Se.Application.Base.Database;
 using Se.Application.Base.Database.GetAll;
 using Se.Contracts.Shared.Crud.Create;
 using Se.Contracts.Shared.Crud.DeleteMany;
-using Se.Contracts.Shared.Crud.GetAll;
 using Se.Contracts.Shared.Crud.GetDetails;
+using Se.Contracts.Shared.Crud.QueryAll;
 using Se.Contracts.Shared.Crud.Update;
 
 namespace Se.Web.Server.Base;
@@ -32,7 +32,7 @@ public abstract class CrudApiController<
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<GetAllResponse>> QueryAll(GetAllRequest request)
+    public async Task<ActionResult<QueryAllResponse>> QueryAll(QueryAllRequest request)
     {
         if (!ModelState.IsValid) 
             return BadRequest(ModelState);
@@ -47,7 +47,7 @@ public abstract class CrudApiController<
         
         var result = await _repo.GetAllAsync(argsDto);
         
-        var response = new GetAllResponse(result.Data, result.TotalCount);
+        var response = new QueryAllResponse(result.Data, result.TotalCount);
         
         return Ok(response);
     }

@@ -5,8 +5,8 @@ using Se.Application.Base.Database.GetAll;
 using Se.Contracts.Features.Products;
 using Se.Contracts.Shared.Crud.Create;
 using Se.Contracts.Shared.Crud.DeleteMany;
-using Se.Contracts.Shared.Crud.GetAll;
 using Se.Contracts.Shared.Crud.GetDetails;
+using Se.Contracts.Shared.Crud.QueryAll;
 using Se.Contracts.Shared.Crud.Update;
 using Se.Domain.Features.Products;
 using Se.Web.Server.Controllers;
@@ -25,7 +25,7 @@ public class ProductsControllerTests
     }
 
     [Fact]
-    public async Task GetAll_ShouldReturnResponse()
+    public async Task QueryAll_ShouldReturnResponse()
     {
         var query = new GetAllArgsDto(["Id"], "Id", false, 5, 1, []);
         _repo.GetAllAsync(Arg.Any<GetAllArgsDto>())
@@ -35,7 +35,7 @@ public class ProductsControllerTests
                 ["456"]
             }, 2));
 
-        var request = new GetAllRequest
+        var request = new QueryAllRequest
         {
             Columns = query.Columns,
             SortBy = query.SortBy,
@@ -51,7 +51,7 @@ public class ProductsControllerTests
         
         Assert.NotNull(result);
 
-        var response = result.Value as GetAllResponse;
+        var response = result.Value as QueryAllResponse;
 
         Assert.NotNull(response);
         Assert.Equal(2, response.Data.Length);

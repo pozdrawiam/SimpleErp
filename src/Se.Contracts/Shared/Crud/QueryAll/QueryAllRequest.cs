@@ -1,8 +1,8 @@
 ﻿using System.ComponentModel;
 
-namespace Se.Contracts.Shared.Crud.GetAll;
+namespace Se.Contracts.Shared.Crud.QueryAll;
 
-public class GetAllRequest
+public class QueryAllRequest
 {
     [DefaultValue(null)]
     public string[]? Columns { get; init; }
@@ -20,5 +20,5 @@ public class GetAllRequest
     public int PageNumber { get; init; } = 1;
     
     [DefaultValue(null)]
-    public GetAllFilter[]? Filters { get; init; }
+    public QueryAllFilter[]? Filters { get; init; }
 }
