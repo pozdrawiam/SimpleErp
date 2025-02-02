@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Text;
 using System.Transactions;
 using Se.Application.Base.Database;
-using Se.Application.Base.Database.GetAll;
+using Se.Contracts.Shared.Crud.QueryAll;
 using Se.Database.DbConnection;
 
 namespace Se.Database.Repositories;
@@ -29,7 +29,7 @@ public class CrudRepo<TEntity> : ICrudRepo<TEntity>
         return entity;
     }
 
-    public async Task<GetAllResultDto> GetAllAsync(GetAllArgsDto query)
+    public async Task<QueryAllResponse> GetAllAsync(QueryAllRequest query)
     {
         using var connection = CreateOpenConnection();
 
@@ -38,28 +38,28 @@ public class CrudRepo<TEntity> : ICrudRepo<TEntity>
             .GetProperties(BindingFlags.Instance | BindingFlags.Public)
             .Select(property => property.Name).ToArray();
 
-        var selectedColumns = query.Columns.Length > 0 ? query.Columns.Where(x => availableColumns.Contains(x)).ToArray() : availableColumns;
+        var selectedColumns = query.Columns?.Length > 0 ? query.Columns.Where(x => availableColumns.Contains(x)).ToArray() : availableColumns;
 
         var sqlBuilder = new StringBuilder("SELECT ");
         sqlBuilder.Append(string.Join(", ", selectedColumns.Select(x => $"[{x}]")));
         sqlBuilder.Append($" FROM [{tableName}]");
 
-        var selectedFilters = query.Filters.Where(x => availableColumns.Contains(x.Column)).ToArray();
+        var selectedFilters = query.Filters?.Where(x => availableColumns.Contains(x.Column)).ToArray();
 
-        var whereClause = selectedFilters.Length > 0
+        var whereClause = selectedFilters?.Length > 0
             ? " WHERE " + string.Join(" AND ", selectedFilters.Select((filter, index) =>
             {
                 var paramName = $"@param{index}";
                 return filter.Operator switch
                 {
-                    GetAllFilterOperatorType.Equals => $"[{filter.Column}] = {paramName}",
-                    GetAllFilterOperatorType.NotEquals => $"[{filter.Column}] <> {paramName}",
-                    GetAllFilterOperatorType.GreaterThan => $"[{filter.Column}] > {paramName}",
-                    GetAllFilterOperatorType.GreaterThanOrEqual => $"[{filter.Column}] >= {paramName}",
-                    GetAllFilterOperatorType.LessThan => $"[{filter.Column}] < {paramName}",
-                    GetAllFilterOperatorType.LessThanOrEqual => $"[{filter.Column}] <= {paramName}",
-                    GetAllFilterOperatorType.Empty => $"[{filter.Column}] IS NULL",
-                    GetAllFilterOperatorType.NotEmpty => $"[{filter.Column}] IS NOT NULL",
+                    QueryAllFilterOperator.Equals => $"[{filter.Column}] = {paramName}",
+                    QueryAllFilterOperator.NotEquals => $"[{filter.Column}] <> {paramName}",
+                    QueryAllFilterOperator.GreaterThan => $"[{filter.Column}] > {paramName}",
+                    QueryAllFilterOperator.GreaterThanOrEqual => $"[{filter.Column}] >= {paramName}",
+                    QueryAllFilterOperator.LessThan => $"[{filter.Column}] < {paramName}",
+                    QueryAllFilterOperator.LessThanOrEqual => $"[{filter.Column}] <= {paramName}",
+                    QueryAllFilterOperator.Empty => $"[{filter.Column}] IS NULL",
+                    QueryAllFilterOperator.NotEmpty => $"[{filter.Column}] IS NOT NULL",
                     _ => throw new NotSupportedException($"Operator {filter.Operator} is not supported")
                 };
             }))
@@ -78,9 +78,9 @@ public class CrudRepo<TEntity> : ICrudRepo<TEntity>
         var countQuery = $"SELECT COUNT(*) FROM [{tableName}]{whereClause}";
 
         var parameters = new DynamicParameters();
-        for (int i = 0; i < selectedFilters.Length; i++)
+        for (int i = 0; i < selectedFilters?.Length; i++)
         {
-            parameters.Add($"@param{i}", query.Filters[i].Value);
+            parameters.Add($"@param{i}", query.Filters![i].Value);
         }
 
         parameters.Add("@Offset", (query.PageNumber - 1) * query.PageSize);
@@ -99,7 +99,7 @@ public class CrudRepo<TEntity> : ICrudRepo<TEntity>
             return values;
         }).ToArray();
 
-        return new GetAllResultDto(result, totalCount);
+        return new QueryAllResponse(result, totalCount);
     }
 
 

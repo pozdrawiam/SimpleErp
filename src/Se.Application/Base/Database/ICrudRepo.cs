@@ -1,11 +1,11 @@
-﻿using Se.Application.Base.Database.GetAll;
+﻿using Se.Contracts.Shared.Crud.QueryAll;
 
 namespace Se.Application.Base.Database;
 
 public interface ICrudRepo<TEntity>
 {
     Task<TEntity?> GetAsync(int id);
-    Task<GetAllResultDto> GetAllAsync(GetAllArgsDto query);
+    Task<QueryAllResponse> GetAllAsync(QueryAllRequest query);
 
     Task<int> AddAsync(TEntity entity);
     Task UpdateAsync(TEntity entity);

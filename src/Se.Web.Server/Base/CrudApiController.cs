@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Se.Application.Base.Database;
-using Se.Application.Base.Database.GetAll;
 using Se.Contracts.Shared.Crud.Create;
 using Se.Contracts.Shared.Crud.DeleteMany;
 using Se.Contracts.Shared.Crud.GetDetails;
@@ -37,16 +36,7 @@ public abstract class CrudApiController<
         if (!ModelState.IsValid) 
             return BadRequest(ModelState);
         
-        var filters = request.Filters?
-            .Select(x => new GetAllFilterDto(x.Column, (GetAllFilterOperatorType)x.Operator, x.Value))
-            .ToArray()
-            ?? [];
-        
-        var argsDto = new GetAllArgsDto(request.Columns ?? [], request.SortBy, request.SortDesc, 
-            request.PageSize, request.PageNumber, filters);
-        
-        var result = await _repo.GetAllAsync(argsDto);
-        
+        var result = await _repo.GetAllAsync(request);
         var response = new QueryAllResponse(result.Data, result.TotalCount);
         
         return Ok(response);

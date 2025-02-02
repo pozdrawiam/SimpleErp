@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
 using Se.Application.Base.Database;
-using Se.Application.Base.Database.GetAll;
 using Se.Contracts.Features.Products;
 using Se.Contracts.Shared.Crud.Create;
 using Se.Contracts.Shared.Crud.DeleteMany;
@@ -27,23 +26,22 @@ public class ProductsControllerTests
     [Fact]
     public async Task QueryAll_ShouldReturnResponse()
     {
-        var query = new GetAllArgsDto(["Id"], "Id", false, 5, 1, []);
-        _repo.GetAllAsync(Arg.Any<GetAllArgsDto>())
-            .Returns(new GetAllResultDto(new object[][]
+        var request = new QueryAllRequest
+        {
+            Columns = ["Id"],
+            SortBy = "Id",
+            SortDesc = false,
+            PageSize = 5,
+            PageNumber = 1,
+            Filters = []
+        };
+        
+        _repo.GetAllAsync(Arg.Any<QueryAllRequest>())
+            .Returns(new QueryAllResponse(new object[][]
             {
                 ["123"],
                 ["456"]
             }, 2));
-
-        var request = new QueryAllRequest
-        {
-            Columns = query.Columns,
-            SortBy = query.SortBy,
-            SortDesc = query.SortDesc,
-            PageSize = query.PageSize,
-            PageNumber = query.PageNumber,
-            Filters = []
-        };
 
         // Act
         var result = (await _sut.QueryAll(request))
