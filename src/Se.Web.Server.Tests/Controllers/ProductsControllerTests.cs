@@ -35,18 +35,18 @@ public class ProductsControllerTests
             PageNumber = 1,
             Filters = []
         };
-        
-        _repo.GetAllAsync(Arg.Any<QueryAllRequest>())
+
+        _repo.GetAllAsync(request)
             .Returns(new QueryAllResponse(new object[][]
             {
-                ["123"],
-                ["456"]
+                [123],
+                [456]
             }, 2));
 
         // Act
         var result = (await _sut.QueryAll(request))
             .Result as OkObjectResult;
-        
+
         Assert.NotNull(result);
 
         var response = result.Value as QueryAllResponse;
