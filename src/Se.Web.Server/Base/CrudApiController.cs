@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Se.Application.Base.Database;
 using Se.Application.Base.Database.GetAll;
-using Se.Web.Server.Dto.Crud.Create;
-using Se.Web.Server.Dto.Crud.DeleteMany;
-using Se.Web.Server.Dto.Crud.GetAll;
-using Se.Web.Server.Dto.Crud.GetDetails;
-using Se.Web.Server.Dto.Crud.Update;
+using Se.Contracts.Shared.Crud.Create;
+using Se.Contracts.Shared.Crud.DeleteMany;
+using Se.Contracts.Shared.Crud.GetAll;
+using Se.Contracts.Shared.Crud.GetDetails;
+using Se.Contracts.Shared.Crud.Update;
 
 namespace Se.Web.Server.Base;
 

@@ -1,3 +1,3 @@
-﻿namespace Se.Web.Server.Dto.Crud.GetAll;
+﻿namespace Se.Contracts.Shared.Crud.GetAll;
 
 public record GetAllResponse(object?[][] Data, int TotalCount);

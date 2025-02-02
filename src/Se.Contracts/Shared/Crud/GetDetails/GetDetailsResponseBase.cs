@@ -1,3 +1,3 @@
-﻿namespace Se.Web.Server.Dto.Crud.GetDetails;
+﻿namespace Se.Contracts.Shared.Crud.GetDetails;
 
 public abstract record GetDetailsResponseBase();

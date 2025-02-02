@@ -1,7 +1,7 @@
 ﻿using Se.Application.Base.Database;
+using Se.Contracts.Features.Products;
 using Se.Domain.Features.Products;
 using Se.Web.Server.Base;
-using Se.Web.Server.Dto.Products;
 
 namespace Se.Web.Server.Controllers;
 

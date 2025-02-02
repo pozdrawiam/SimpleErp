@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Se.Web.Server.Dto.Crud.DeleteMany;
+namespace Se.Contracts.Shared.Crud.DeleteMany;
 
 public record DeleteManyRequest
 {

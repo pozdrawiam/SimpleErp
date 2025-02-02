@@ -1,4 +1,4 @@
-﻿namespace Se.Web.Server.Dto.Crud.GetAll;
+﻿namespace Se.Contracts.Shared.Crud.GetAll;
 
 public enum GetAllFilterOperator
 {

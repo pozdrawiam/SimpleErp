@@ -1,3 +1,3 @@
-﻿namespace Se.Web.Server.Dto.Crud.Update;
+﻿namespace Se.Contracts.Shared.Crud.Update;
 
 public abstract record UpdateRequestBase(int Id);

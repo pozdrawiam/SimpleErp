@@ -2,14 +2,14 @@
 using NSubstitute;
 using Se.Application.Base.Database;
 using Se.Application.Base.Database.GetAll;
+using Se.Contracts.Features.Products;
+using Se.Contracts.Shared.Crud.Create;
+using Se.Contracts.Shared.Crud.DeleteMany;
+using Se.Contracts.Shared.Crud.GetAll;
+using Se.Contracts.Shared.Crud.GetDetails;
+using Se.Contracts.Shared.Crud.Update;
 using Se.Domain.Features.Products;
 using Se.Web.Server.Controllers;
-using Se.Web.Server.Dto.Crud.Create;
-using Se.Web.Server.Dto.Crud.DeleteMany;
-using Se.Web.Server.Dto.Crud.GetAll;
-using Se.Web.Server.Dto.Crud.GetDetails;
-using Se.Web.Server.Dto.Crud.Update;
-using Se.Web.Server.Dto.Products;
 
 namespace Se.Web.Server.Tests.Controllers;
 

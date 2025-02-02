@@ -1,6 +1,6 @@
-﻿using Se.Web.Server.Dto.Crud.GetDetails;
+﻿using Se.Contracts.Shared.Crud.GetDetails;
 
-namespace Se.Web.Server.Dto.Products;
+namespace Se.Contracts.Features.Products;
 
 public record ProductGetDetailsResponse(int Id, string Name) : GetDetailsResponseBase;
 
