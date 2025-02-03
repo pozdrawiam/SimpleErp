@@ -29,7 +29,7 @@ public class CrudRepo<TEntity> : ICrudRepo<TEntity>
         return entity;
     }
 
-    public async Task<QueryAllResponse> GetAllAsync(QueryAllRequest query)
+    public async Task<QueryAllResponse> QueryAllAsync(QueryAllRequest query)
     {
         using var connection = CreateOpenConnection();
 
