@@ -36,7 +36,7 @@ public class ProductsControllerTests
             Filters = []
         };
 
-        _repo.GetAllAsync(request)
+        _repo.QueryAllAsync(request)
             .Returns(new QueryAllResponse(new object[][]
             {
                 [123],

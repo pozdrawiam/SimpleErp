@@ -36,7 +36,7 @@ public abstract class CrudApiController<
         if (!ModelState.IsValid) 
             return BadRequest(ModelState);
         
-        var result = await _repo.GetAllAsync(request);
+        var result = await _repo.QueryAllAsync(request);
         var response = new QueryAllResponse(result.Data, result.TotalCount);
         
         return Ok(response);
