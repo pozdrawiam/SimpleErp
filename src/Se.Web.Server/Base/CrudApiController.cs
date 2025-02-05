@@ -45,7 +45,7 @@ public abstract class CrudApiController<
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<GetDetailsResponseBase>> GetDetails([FromQuery] GetDetailsRequest request)
+    public async Task<ActionResult<TGetDetailsResponse>> GetDetails([FromQuery] GetDetailsRequest request)
     {
         TEntity? entity = await _repo.GetAsync(request.Id);
 
