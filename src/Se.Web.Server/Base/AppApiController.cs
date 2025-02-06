@@ -3,7 +3,7 @@
 namespace Se.Web.Server.Base;
 
 [ApiController]
-[Route("[controller]/[action]")]
+[Route("api/[controller]/[action]")]
 public abstract class AppApiController : ControllerBase
 {
 }
