@@ -3,7 +3,7 @@ using Se.Contracts.Shared.Crud.GetDetails;
 
 namespace Se.Web.Client;
 
-public interface IWebApiClient
+public interface ISeWebApiClient
 {
     Task<ProductGetDetailsResponse> GetDetailsAsync(GetDetailsRequest request, CancellationToken ct = default);
 }
