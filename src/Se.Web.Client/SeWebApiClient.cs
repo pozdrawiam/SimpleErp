@@ -16,7 +16,7 @@ public class SeWebApiClient : ISeWebApiClient
     
     public async Task<ProductGetDetailsResponse?> GetDetailsAsync(GetDetailsRequest request, CancellationToken ct = default)
     {
-        return await GetAsync<ProductGetDetailsResponse>($"Products/GetDetails/{request.Id}");
+        return await GetAsync<ProductGetDetailsResponse>($"Products/GetDetails?Id={request.Id}");
     }
     
     private async Task<TResult?> GetAsync<TResult>(string url) 
