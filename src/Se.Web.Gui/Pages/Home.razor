@@ -1,7 +1,21 @@
 ﻿@page "/"
+@using Se.Contracts.Features.Products
+@using Se.Contracts.Shared.Crud.GetDetails
+@using Se.Web.Client
 
 <PageTitle>Home</PageTitle>
 
 <h1>Hello, world!</h1>
 
 Welcome to your new app.
+
+@code 
+{
+    protected override async Task OnInitializedAsync()
+    {
+        var api = new SeWebApiClient(new HttpClient() { BaseAddress = new Uri("https://localhost:5443") });
+        ProductGetDetailsResponse? response = await api.GetDetailsAsync(new GetDetailsRequest(1));
+        
+        Console.WriteLine($"Response: {response?.Name}");
+    }
+}
