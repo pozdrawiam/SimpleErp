@@ -14,7 +14,7 @@ Welcome to your new app.
     protected override async Task OnInitializedAsync()
     {
         var api = new SeWebApiClient(new HttpClient() { BaseAddress = new Uri("https://localhost:5443") });
-        ProductGetDetailsResponse? response = await api.GetDetailsAsync(new GetDetailsRequest(1));
+        ProductGetDetailsResponse? response = await api.ProductGetDetailsAsync(new GetDetailsRequest(1));
         
         Console.WriteLine($"Response: {response?.Name}");
     }

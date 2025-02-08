@@ -5,5 +5,5 @@ namespace Se.Web.Client;
 
 public interface ISeWebApiClient
 {
-    Task<ProductGetDetailsResponse?> GetDetailsAsync(GetDetailsRequest request, CancellationToken ct = default);
+    Task<ProductGetDetailsResponse?> ProductGetDetailsAsync(GetDetailsRequest request, CancellationToken ct = default);
 }
