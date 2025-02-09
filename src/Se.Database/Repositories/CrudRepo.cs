@@ -4,7 +4,7 @@ using System.Data;
 using System.Reflection;
 using System.Text;
 using System.Transactions;
-using Se.Application.Base.Database;
+using Se.Application.Shared;
 using Se.Contracts.Shared.Crud.QueryAll;
 using Se.Database.DbConnection;
 

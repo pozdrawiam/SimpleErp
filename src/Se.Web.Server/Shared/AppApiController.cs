@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Se.Web.Server.Base;
+namespace Se.Web.Server.Shared;
 
 [ApiController]
 [Route("api/[controller]/[action]")]

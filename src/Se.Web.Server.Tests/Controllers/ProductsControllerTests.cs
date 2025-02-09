@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using NSubstitute;
-using Se.Application.Base.Database;
+using Se.Application.Shared;
 using Se.Contracts.Features.Products;
 using Se.Contracts.Shared.Crud.Create;
 using Se.Contracts.Shared.Crud.DeleteMany;

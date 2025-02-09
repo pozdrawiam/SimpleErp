@@ -1,6 +1,6 @@
 ﻿using Se.Contracts.Shared.Crud.QueryAll;
 
-namespace Se.Application.Base.Database;
+namespace Se.Application.Shared;
 
 public interface ICrudRepo<TEntity>
 {

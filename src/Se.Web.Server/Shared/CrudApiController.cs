@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Se.Application.Base.Database;
+using Se.Application.Shared;
 using Se.Contracts.Shared.Crud.Create;
 using Se.Contracts.Shared.Crud.DeleteMany;
 using Se.Contracts.Shared.Crud.GetDetails;
 using Se.Contracts.Shared.Crud.QueryAll;
 using Se.Contracts.Shared.Crud.Update;
 
-namespace Se.Web.Server.Base;
+namespace Se.Web.Server.Shared;
 
 public abstract class CrudApiController<
     TEntity,

@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Se.Application.Base.Database;
+using Se.Application.Shared;
 using Se.Database.DbConnection;
 using Se.Database.Repositories;
 using Se.Domain.Features.Products;
