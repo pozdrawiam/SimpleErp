@@ -3,16 +3,16 @@ using System.Net.Http.Json;
 
 namespace Se.Web.Client.Shared;
 
-public abstract class JsonApiClient
+public class JsonApiClient
 {
     private readonly HttpClient _httpClient;
 
-    protected JsonApiClient(HttpClient httpClient)
+    public JsonApiClient(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }
     
-    protected async Task<TResult?> GetAsync<TResult>(string url) 
+    public async Task<TResult?> GetAsync<TResult>(string url) 
         => await SendAsync<object, TResult?>(HttpMethod.Get, url);
     
     private async Task<TResult?> SendAsync<TData, TResult>(
