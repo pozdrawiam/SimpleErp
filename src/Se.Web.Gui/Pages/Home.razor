@@ -2,6 +2,7 @@
 @using Se.Contracts.Features.Products
 @using Se.Contracts.Shared.Crud.GetDetails
 @using Se.Web.Client
+@inject ISeWebApiClient Api
 
 <PageTitle>Home</PageTitle>
 
@@ -13,8 +14,7 @@ Welcome to your new app.
 {
     protected override async Task OnInitializedAsync()
     {
-        var api = new SeWebApiClient(new HttpClient() { BaseAddress = new Uri("https://localhost:5443") });
-        ProductGetDetailsResponse? response = await api.ProductGetDetailsAsync(new GetDetailsRequest(1));
+        ProductGetDetailsResponse? response = await Api.ProductGetDetailsAsync(new GetDetailsRequest(1));
         
         Console.WriteLine($"Response: {response?.Name}");
     }
