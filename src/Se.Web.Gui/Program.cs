@@ -16,6 +16,7 @@ baseAddress = "https://localhost:5443";
 #endif
 
 builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(baseAddress) });
-builder.Services.AddScoped<ISeWebApiClient, SeWebApiClient>();
+
+builder.Services.AddWebClientModule();
 
 await builder.Build().RunAsync();
