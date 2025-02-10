@@ -1,9 +1,8 @@
-﻿using Se.Contracts.Features.Products;
-using Se.Contracts.Shared.Crud.GetDetails;
+﻿using Se.Web.Client.Features;
 
 namespace Se.Web.Client;
 
 public interface ISeWebApiClient
 {
-    Task<ProductGetDetailsResponse?> ProductGetDetailsAsync(GetDetailsRequest request, CancellationToken ct = default);
+    public IProductsApiClient Products { get; }
 }

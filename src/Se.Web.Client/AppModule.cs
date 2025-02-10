@@ -9,7 +9,7 @@ public static class AppModule
     public static IServiceCollection AddWebClientModule(this IServiceCollection services)
     {
         services.AddScoped<JsonApiClient>();
-        services.AddScoped<ISeWebApiClient2, SeWebApiClient2>();
+        services.AddScoped<ISeWebApiClient, SeWebApiClient>();
         
         services.AddScoped<IProductsApiClient, ProductsApiClient>();
         
