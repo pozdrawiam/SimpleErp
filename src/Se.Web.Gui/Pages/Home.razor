@@ -2,7 +2,7 @@
 @using Se.Contracts.Features.Products
 @using Se.Contracts.Shared.Crud.GetDetails
 @using Se.Web.Client
-@inject ISeWebApiClient Api
+@inject ISeWebApiClient2 Api
 
 <PageTitle>Home</PageTitle>
 
@@ -14,7 +14,7 @@ Welcome to your new app.
 {
     protected override async Task OnInitializedAsync()
     {
-        ProductGetDetailsResponse? response = await Api.ProductGetDetailsAsync(new GetDetailsRequest(1));
+        ProductGetDetailsResponse? response = await Api.Products.GetDetailsAsync(new GetDetailsRequest(1));
         
         Console.WriteLine($"Response: {response?.Name}");
     }
