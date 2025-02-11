@@ -15,19 +15,17 @@ public class CrudApiClient<TGetDetailsResponse, TCreateRequest, TUpdateRequest>
     private readonly JsonApiClient _apiClient;
     private readonly string _resourceName;
 
-    public CrudApiClient(JsonApiClient apiClient, string resourceName)
+    protected CrudApiClient(JsonApiClient apiClient, string resourceName)
     {
         _apiClient = apiClient;
         _resourceName = resourceName;
     }
 
-    public Task<QueryAllResponse> QueryAllAsync(QueryAllRequest request, CancellationToken ct = default)
-    {
-        throw new NotImplementedException();
-    }
+    public Task<QueryAllResponse?> QueryAllAsync(QueryAllRequest request, CancellationToken ct = default)
+        => _apiClient.PostAsync<QueryAllRequest, QueryAllResponse>(_resourceName, request);
 
-    public async Task<TGetDetailsResponse?> GetDetailsAsync(GetDetailsRequest request, CancellationToken ct = default)
-        => await _apiClient.GetAsync<TGetDetailsResponse>($"{_resourceName}/GetDetails?Id={request.Id}");
+    public Task<TGetDetailsResponse?> GetDetailsAsync(GetDetailsRequest request, CancellationToken ct = default)
+        => _apiClient.GetAsync<TGetDetailsResponse>($"{_resourceName}/GetDetails?Id={request.Id}");
 
     public Task<CreateResponse> Create(TCreateRequest request, CancellationToken ct = default)
     {

@@ -11,24 +11,27 @@ public class JsonApiClient
     {
         _httpClient = httpClient;
     }
-    
-    public async Task<TResult?> GetAsync<TResult>(string url) 
+
+    public async Task<TResult?> GetAsync<TResult>(string url)
         => await SendAsync<object, TResult?>(HttpMethod.Get, url);
-    
+
+    public async Task<TResult?> PostAsync<TData, TResult>(string url, TData data)
+        => await SendAsync<TData, TResult?>(HttpMethod.Post, url, data);
+
     private async Task<TResult?> SendAsync<TData, TResult>(
-        HttpMethod method, 
-        string url, 
+        HttpMethod method,
+        string url,
         TData? data = default)
     {
         var request = new HttpRequestMessage(method, $"api/{url}");
-        
+
         if (data != null && (method == HttpMethod.Post || method == HttpMethod.Put))
         {
             request.Content = JsonContent.Create(data);
         }
 
         HttpResponseMessage response;
-        
+
         try
         {
             response = await _httpClient.SendAsync(request);
