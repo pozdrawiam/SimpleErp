@@ -28,17 +28,11 @@ public class CrudApiClient<TGetDetailsResponse, TCreateRequest, TUpdateRequest>
         => _apiClient.GetAsync<TGetDetailsResponse>($"{_resourceName}/GetDetails?Id={request.Id}");
 
     public Task<CreateResponse> Create(TCreateRequest request, CancellationToken ct = default)
-    {
-        throw new NotImplementedException();
-    }
+        => throw new NotImplementedException();
 
     public Task<UpdateResponse> Update(TUpdateRequest request, CancellationToken ct = default)
-    {
-        throw new NotImplementedException();
-    }
+        => throw new NotImplementedException();
 
     public Task<DeleteManyResponse> DeleteMany(DeleteManyRequest request, CancellationToken ct = default)
-    {
-        throw new NotImplementedException();
-    }
+        => throw new NotImplementedException();
 }
