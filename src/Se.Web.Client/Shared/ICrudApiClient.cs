@@ -6,7 +6,7 @@ using Se.Contracts.Shared.Crud.Update;
 
 namespace Se.Web.Client.Shared;
 
-public interface ICrudApiClient<TGetDetailsResponse, TCreateRequest, TUpdateRequest>
+public interface ICrudApiClient<TGetDetailsResponse, in TCreateRequest, in TUpdateRequest>
     where TGetDetailsResponse : GetDetailsResponseBase
     where TCreateRequest : CreateRequestBase
     where TUpdateRequest : UpdateRequestBase
