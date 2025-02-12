@@ -17,6 +17,12 @@ public class JsonApiClient
 
     public async Task<TResult?> PostAsync<TData, TResult>(string url, TData data)
         => await SendAsync<TData, TResult?>(HttpMethod.Post, url, data);
+    
+    public async Task<TResult?> PutAsync<TData, TResult>(string url, TData data)
+        => await SendAsync<TData, TResult?>(HttpMethod.Put, url, data);
+    
+    public async Task<TResult?> DeleteAsync<TData, TResult>(string url, TData data)
+        => await SendAsync<TData, TResult?>(HttpMethod.Delete, url, data);
 
     private async Task<TResult?> SendAsync<TData, TResult>(
         HttpMethod method,
@@ -25,7 +31,7 @@ public class JsonApiClient
     {
         var request = new HttpRequestMessage(method, $"api/{url}");
 
-        if (data != null && (method == HttpMethod.Post || method == HttpMethod.Put))
+        if (data != null && (method == HttpMethod.Post || method == HttpMethod.Put || method == HttpMethod.Delete))
         {
             request.Content = JsonContent.Create(data);
         }
