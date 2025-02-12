@@ -14,7 +14,7 @@ public interface ICrudApiClient<TGetDetailsResponse, TCreateRequest, TUpdateRequ
     Task<QueryAllResponse?> QueryAllAsync(QueryAllRequest request, CancellationToken ct = default);
     Task<TGetDetailsResponse?> GetDetailsAsync(GetDetailsRequest request, CancellationToken ct = default);
 
-    Task<CreateResponse> Create(TCreateRequest request, CancellationToken ct = default);
-    Task<UpdateResponse> Update(TUpdateRequest request, CancellationToken ct = default);
-    Task<DeleteManyResponse> DeleteMany(DeleteManyRequest request, CancellationToken ct = default);
+    Task<CreateResponse?> CreateAsync(TCreateRequest request, CancellationToken ct = default);
+    Task<UpdateResponse?> UpdateAsync(TUpdateRequest request, CancellationToken ct = default);
+    Task<DeleteManyResponse?> DeleteManyAsync(DeleteManyRequest request, CancellationToken ct = default);
 }
