@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using Se.Contracts.Features.Products
 @using Se.Contracts.Shared.Crud.GetDetails
+@using Se.Contracts.Shared.Crud.QueryAll
 @using Se.Web.Client
 @inject ISeWebApiClient Api
 
@@ -14,8 +15,10 @@ Welcome to your new app.
 {
     protected override async Task OnInitializedAsync()
     {
-        ProductGetDetailsResponse? response = await Api.Products.GetDetailsAsync(new GetDetailsRequest(1));
+        //ProductGetDetailsResponse? response = await Api.Products.GetDetailsAsync(new GetDetailsRequest(1));
+        //var response = await Api.Products.CreateAsync(new ProductCreateRequest("Test gui 1"));
+        var response = await Api.Products.QueryAllAsync(new QueryAllRequest());
         
-        Console.WriteLine($"Response: {response?.Name}");
+        Console.WriteLine($"Response: {response?.Data.LastOrDefault()?.LastOrDefault()}");
     }
 }

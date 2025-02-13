@@ -22,7 +22,7 @@ public class CrudApiClient<TGetDetailsResponse, TCreateRequest, TUpdateRequest>
     }
 
     public Task<QueryAllResponse?> QueryAllAsync(QueryAllRequest request, CancellationToken ct = default)
-        => _apiClient.PostAsync<QueryAllRequest, QueryAllResponse>(_resourceName, request);
+        => _apiClient.PostAsync<QueryAllRequest, QueryAllResponse>($"{_resourceName}/QueryAll", request);
 
     public Task<TGetDetailsResponse?> GetDetailsAsync(GetDetailsRequest request, CancellationToken ct = default)
         => _apiClient.GetAsync<TGetDetailsResponse>($"{_resourceName}/GetDetails?Id={request.Id}");
