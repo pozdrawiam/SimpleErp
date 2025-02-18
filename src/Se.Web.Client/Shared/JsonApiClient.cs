@@ -52,24 +52,27 @@ public class JsonApiClient
 
         if (response.StatusCode == HttpStatusCode.BadRequest)
         {
-            //AppValidationResult? validationResult = null;
+            ApiValidationResult? validationResult = null;
+            
             try
             {
-                //validationResult = await response.Content.ReadFromJsonAsync<AppValidationResult>();
+                validationResult = await response.Content.ReadFromJsonAsync<ApiValidationResult>();
             }
             catch
             {
                 // ignored
             }
 
-            //if (validationResult != null)
-            //throw new AppValidationException(validationResult);
-        }
-        else if (response.StatusCode == HttpStatusCode.Unauthorized)
-        {
-            //await OnUnauthorized();
+            if (validationResult != null)
+                throw new ApiValidationException(validationResult);
+            
+            throw new InvalidOperationException($"Bad Request: {response.StatusCode} - {response.ReasonPhrase}");
         }
 
-        return default;
+        throw new InvalidOperationException($"Api response status code invalid: {(int)response.StatusCode} ({response.StatusCode}).");
+        //else if (response.StatusCode == HttpStatusCode.Unauthorized)
+        //{
+            //await OnUnauthorized();
+        //}
     }
 }

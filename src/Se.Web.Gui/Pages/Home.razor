@@ -1,6 +1,7 @@
 ﻿@page "/"
-@using Se.Contracts.Shared.Crud.QueryAll
+@using Se.Contracts.Features.Products
 @using Se.Web.Client
+@using Se.Web.Client.Shared
 @inject ISeWebApiClient Api
 
 <PageTitle>Home</PageTitle>
@@ -13,8 +14,15 @@ Welcome to your new app.
 {
     protected override async Task OnInitializedAsync()
     {
-        var response = await Api.Products.QueryAllAsync(new QueryAllRequest());
-        
-        Console.WriteLine($"Response: {response?.Data.LastOrDefault()?.LastOrDefault()}");
+        try
+        {
+            var response = await Api.Products.CreateAsync(new ProductCreateRequest("Abc"));
+
+            Console.WriteLine($"Created product id: {response?.Id}");
+        }
+        catch (ApiValidationException e)
+        {
+            Console.WriteLine($"Error: {e.Errors.First().Value.First()}");
+        }
     }
 }
