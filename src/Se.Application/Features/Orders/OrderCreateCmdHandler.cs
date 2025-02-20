@@ -4,12 +4,25 @@ namespace Se.Application.Features.Orders;
 
 public class OrderCreateCmdHandler
 {
-    public Task<int> Handle(OrderCreateCmd cmd)
+    private readonly IOrderRepo _repo;
+
+    public OrderCreateCmdHandler(IOrderRepo repo)
     {
-        var entity = new OrderEntity();
+        _repo = repo;
+    }
+    
+    public async Task<int> Handle(OrderCreateCmd cmd)
+    {
+        var entity = new OrderEntity
+        {
+            Note = cmd.Note
+        };
         
-        entity.AddItem(1, 123);
+        foreach (var item in cmd.Items)
+            entity.AddItem(item.ProductId, item.Quantity);
         
-        return Task.FromResult(entity.Id);
+        var id = await _repo.AddAsync(entity);
+
+        return id;
     }
 }
