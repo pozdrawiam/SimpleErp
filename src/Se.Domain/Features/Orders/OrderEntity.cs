@@ -37,23 +37,29 @@ public class OrderItem
     public int Id { get; init; }
     public Guid Guid { get; } = Guid.NewGuid();
     public required int ProductId { get; init; }
-    public Quantity Quantity { get; set; } = 1;
+    public Quantity Quantity { get; set; } = 1M;
 }
 
-public class Quantity
+public abstract class ValueObject<TValue>
 {
-    public Quantity(decimal value)
+    protected ValueObject(TValue value)
     {
-        if (value < 0.000001M)
-        {
-            throw new ArgumentOutOfRangeException(nameof(value));
-        }
-        
         Value = value;
     }
 
-    public decimal Value { get; }
-    
-    public static implicit operator decimal(Quantity quantity) => quantity.Value;
+    public TValue Value { get; }
+
+    public static implicit operator TValue(ValueObject<TValue> obj) => obj.Value;
+}
+
+public class Quantity : ValueObject<decimal>
+{
+    public Quantity(decimal value) : base(value)
+    {
+        if (value < 0.000001M)
+            throw new ArgumentOutOfRangeException(nameof(value));
+    }
+
     public static implicit operator Quantity(decimal value) => new(value);
 }
+
