@@ -1,10 +1,11 @@
-﻿namespace Se.Domain.Features.Orders;
+﻿using Se.Domain.Shared.Entities;
 
-public class OrderEntity
+namespace Se.Domain.Features.Orders;
+
+public class OrderEntity : Entity
 {
     private readonly List<OrderItemEntity> _items = [];
     
-    public int Id { get; init; }
     public DateTime CreatedAtUtc { get; init; } = DateTime.UtcNow;
     public string Note { get; set; } = "";
     
