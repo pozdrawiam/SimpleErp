@@ -31,35 +31,3 @@ public class OrderEntity
             _items.Remove(item);
     }
 }
-
-public class OrderItemEntity
-{
-    public int Id { get; init; }
-    public Guid Guid { get; } = Guid.NewGuid();
-    public required int ProductId { get; init; }
-    public Quantity Quantity { get; set; } = 1M;
-}
-
-public abstract class ValueObject<TValue>
-{
-    protected ValueObject(TValue value)
-    {
-        Value = value;
-    }
-
-    public TValue Value { get; }
-
-    public static implicit operator TValue(ValueObject<TValue> obj) => obj.Value;
-}
-
-public class Quantity : ValueObject<decimal>
-{
-    public Quantity(decimal value) : base(value)
-    {
-        if (value < 0.000001M)
-            throw new ArgumentOutOfRangeException(nameof(value));
-    }
-
-    public static implicit operator Quantity(decimal value) => new(value);
-}
-
