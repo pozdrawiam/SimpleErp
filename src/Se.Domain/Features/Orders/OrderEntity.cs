@@ -2,17 +2,17 @@
 
 public class OrderEntity
 {
-    private readonly List<OrderItem> _items = [];
+    private readonly List<OrderItemEntity> _items = [];
     
     public int Id { get; init; }
     public DateTime CreatedAtUtc { get; init; } = DateTime.UtcNow;
     public string Note { get; set; } = "";
     
-    public IReadOnlyCollection<OrderItem> Items => _items;
+    public IReadOnlyCollection<OrderItemEntity> Items => _items;
 
     public Guid AddItem(int productId, decimal quantity)
     {
-        var item = new OrderItem
+        var item = new OrderItemEntity
         {
             ProductId = productId,
             Quantity = quantity
@@ -32,7 +32,7 @@ public class OrderEntity
     }
 }
 
-public class OrderItem
+public class OrderItemEntity
 {
     public int Id { get; init; }
     public Guid Guid { get; } = Guid.NewGuid();
