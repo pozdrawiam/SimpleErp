@@ -1,4 +1,5 @@
 ﻿using Se.Domain.Shared.Entities;
+using Se.Domain.Shared.ValueObjects;
 
 namespace Se.Domain.Features.Orders;
 
@@ -11,7 +12,7 @@ public class OrderEntity : Entity
     
     public IReadOnlyCollection<OrderItemEntity> Items => _items;
 
-    public Guid AddItem(int productId, decimal quantity)
+    public Guid AddItem(int productId, Quantity quantity)
     {
         var item = new OrderItemEntity
         {
