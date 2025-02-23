@@ -1,4 +1,5 @@
-﻿using Se.Domain.Features.Orders;
+﻿using Se.Contracts.Features.Orders;
+using Se.Domain.Features.Orders;
 
 namespace Se.Application.Features.Orders;
 
@@ -11,7 +12,7 @@ public class OrderCreateCmdHandler
         _repo = repo;
     }
     
-    public async Task<int> Handle(OrderCreateCmd cmd)
+    public async Task<int> Handle(OrderCreateRequest cmd)
     {
         var entity = new OrderEntity
         {
