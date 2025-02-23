@@ -1,4 +1,6 @@
-﻿namespace Se.Application.Features.Orders;
+﻿using Se.Contracts.Shared.Crud.DeleteMany;
+
+namespace Se.Application.Features.Orders;
 
 public class OrderDeleteCmdHandler
 {
@@ -9,15 +11,11 @@ public class OrderDeleteCmdHandler
         _orderRepo = orderRepo;
     }
     
-    public async Task<int> Handle(OrderDeleteCmd cmd)
+    public async Task<int> Handle(DeleteManyRequest cmd)
     {
-        var order = await _orderRepo.GetAsync(cmd.Id);
+        if (cmd.Ids?.Count > 0)
+            await _orderRepo.DeleteManyAsync(cmd.Ids);
         
-        if (order == null)
-            return 0;
-
-        await _orderRepo.DeleteManyAsync([cmd.Id]);
-        
-        return order.Id;
+        return 0;
     }
 }
