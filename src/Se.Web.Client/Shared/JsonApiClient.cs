@@ -44,7 +44,7 @@ public class JsonApiClient
         }
         catch (HttpRequestException e) when (e.StatusCode == null)
         {
-            return default;
+            throw new InvalidOperationException($"Api connection error.", e);
         }
 
         if (response.IsSuccessStatusCode)
