@@ -1,8 +1,9 @@
-﻿using Se.Contracts.Shared.Crud.DeleteMany;
+﻿using Se.Application.Shared;
+using Se.Contracts.Shared.Crud.DeleteMany;
 
 namespace Se.Application.Features.Orders;
 
-public class OrderDeleteCmdHandler
+public class OrderDeleteCmdHandler : ICmdHandler<DeleteManyRequest>
 {
     private readonly IOrderRepo _orderRepo;
 
@@ -11,7 +12,7 @@ public class OrderDeleteCmdHandler
         _orderRepo = orderRepo;
     }
     
-    public async Task<int> Handle(DeleteManyRequest cmd)
+    public async Task<int> Handle(DeleteManyRequest cmd, CancellationToken _)
     {
         if (cmd.Ids?.Count > 0)
             await _orderRepo.DeleteManyAsync(cmd.Ids);

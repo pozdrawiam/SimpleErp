@@ -1,9 +1,10 @@
-﻿using Se.Contracts.Features.Orders;
+﻿using Se.Application.Shared;
+using Se.Contracts.Features.Orders;
 using Se.Domain.Features.Orders;
 
 namespace Se.Application.Features.Orders;
 
-public class OrderCreateCmdHandler
+public class OrderCreateCmdHandler : ICmdHandler<OrderCreateRequest>
 {
     private readonly IOrderRepo _repo;
 
@@ -12,7 +13,7 @@ public class OrderCreateCmdHandler
         _repo = repo;
     }
     
-    public async Task<int> Handle(OrderCreateRequest cmd)
+    public async Task<int> Handle(OrderCreateRequest cmd, CancellationToken _)
     {
         var entity = new OrderEntity
         {
