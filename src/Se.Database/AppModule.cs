@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Se.Application.Shared;
 using Se.Database.DbConnection;
 using Se.Database.Repositories;
+using Se.Domain.Features.Orders;
 using Se.Domain.Features.Products;
 
 namespace Se.Database;
@@ -16,6 +17,7 @@ public static class AppModule
         
         services.AddSingleton<IDbConnectionFactory>(new SqlServerConnectionFactory(dbConnectionString));
         
+        services.AddTransient<ICrudRepo<OrderEntity>, CrudRepo<OrderEntity>>();
         services.AddTransient<ICrudRepo<ProductEntity>, CrudRepo<ProductEntity>>();
         
         return services;
