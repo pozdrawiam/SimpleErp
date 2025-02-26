@@ -9,13 +9,11 @@ using Se.Domain.Features.Orders;
 
 namespace Se.Database.Repositories;
 
-public class OrderRepo : ICrudRepo<OrderEntity>
+public class OrderRepo : Repo, ICrudRepo<OrderEntity>
 {
-    private readonly IDbConnectionFactory _dbConnectionFactory;
-
-    public OrderRepo(IDbConnectionFactory dbConnectionFactory)
+    public OrderRepo(IDbConnectionFactory connectionFactory) 
+        : base(connectionFactory)
     {
-        _dbConnectionFactory = dbConnectionFactory;
     }
     
     public Task<OrderEntity?> GetAsync(int id)
@@ -58,14 +56,6 @@ public class OrderRepo : ICrudRepo<OrderEntity>
         }
 
         transactionScope.Complete();
-    }
-    
-    private IDbConnection CreateOpenConnection()
-    {
-        var dbConnection = _dbConnectionFactory.CreateConnection();
-        dbConnection.Open();
-
-        return dbConnection;
     }
     
     private OrderModel MapEntityToModel(OrderEntity entity)

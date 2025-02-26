@@ -1,6 +1,5 @@
 ﻿using Dapper;
 using Dapper.Contrib.Extensions;
-using System.Data;
 using System.Reflection;
 using System.Text;
 using System.Transactions;
@@ -10,14 +9,11 @@ using Se.Database.DbConnection;
 
 namespace Se.Database.Repositories;
 
-public class CrudRepo<TEntity> : ICrudRepo<TEntity>
+public class CrudRepo<TEntity> : Repo, ICrudRepo<TEntity>
     where TEntity : class
 {
-    private readonly IDbConnectionFactory _dbConnectionFactory;
-
-    public CrudRepo(IDbConnectionFactory dbConnectionFactory)
+    public CrudRepo(IDbConnectionFactory connectionFactory) : base(connectionFactory)
     {
-        _dbConnectionFactory = dbConnectionFactory;
     }
 
     public async Task<TEntity?> GetAsync(int id)
@@ -133,14 +129,6 @@ public class CrudRepo<TEntity> : ICrudRepo<TEntity>
         }
 
         transactionScope.Complete();
-    }
-
-    private IDbConnection CreateOpenConnection()
-    {
-        var dbConnection = _dbConnectionFactory.CreateConnection();
-        dbConnection.Open();
-
-        return dbConnection;
     }
     
     private static string GetTableName()
