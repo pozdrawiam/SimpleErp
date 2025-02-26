@@ -1,5 +1,4 @@
-﻿using System.Data;
-using System.Transactions;
+﻿using System.Transactions;
 using Dapper.Contrib.Extensions;
 using Se.Application.Shared;
 using Se.Contracts.Shared.Crud.QueryAll;
