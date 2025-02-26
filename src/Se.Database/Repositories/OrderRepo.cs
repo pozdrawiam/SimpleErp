@@ -28,9 +28,13 @@ public class OrderRepo : ICrudRepo<OrderEntity>
         throw new NotImplementedException();
     }
 
-    public Task<int> AddAsync(OrderEntity entity)
+    public async Task<int> AddAsync(OrderEntity entity)
     {
-        throw new NotImplementedException();
+        using var connection = CreateOpenConnection();
+        var model = MapEntityToModel(entity);
+        var id = await connection.InsertAsync(model);
+
+        return id;
     }
 
     public Task UpdateAsync(OrderEntity entity)
@@ -62,5 +66,15 @@ public class OrderRepo : ICrudRepo<OrderEntity>
         dbConnection.Open();
 
         return dbConnection;
+    }
+    
+    private OrderModel MapEntityToModel(OrderEntity entity)
+    {
+        return new OrderModel
+        {
+            Id = entity.Id,
+            CreatedAtUtc = entity.CreatedAtUtc,
+            Note = entity.Note
+        };
     }
 }
