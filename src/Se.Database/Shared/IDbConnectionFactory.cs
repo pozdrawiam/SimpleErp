@@ -1,6 +1,6 @@
 ﻿using System.Data;
 
-namespace Se.Database.DbConnection;
+namespace Se.Database.Shared;
 
 public interface IDbConnectionFactory
 {

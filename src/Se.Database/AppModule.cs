@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Se.Application.Shared;
-using Se.Database.DbConnection;
-using Se.Database.Repositories;
+using Se.Database.Features.Orders;
+using Se.Database.Shared;
 using Se.Domain.Features.Orders;
 using Se.Domain.Features.Products;
 

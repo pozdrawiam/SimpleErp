@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Se.Database.Models;
+namespace Se.Database.Features.Orders;
 
 [Table("Orders")]
 public class OrderModel

@@ -1,13 +1,12 @@
-﻿using Dapper;
-using Dapper.Contrib.Extensions;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Text;
 using System.Transactions;
+using Dapper;
+using Dapper.Contrib.Extensions;
 using Se.Application.Shared;
 using Se.Contracts.Shared.Crud.QueryAll;
-using Se.Database.DbConnection;
 
-namespace Se.Database.Repositories;
+namespace Se.Database.Shared;
 
 public class CrudRepo<TEntity> : Repo, ICrudRepo<TEntity>
     where TEntity : class

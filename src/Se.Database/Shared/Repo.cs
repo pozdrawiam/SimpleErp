@@ -1,7 +1,6 @@
 ﻿using System.Data;
-using Se.Database.DbConnection;
 
-namespace Se.Database.Repositories;
+namespace Se.Database.Shared;
 
 public abstract class Repo
 {

@@ -2,11 +2,10 @@
 using Dapper.Contrib.Extensions;
 using Se.Application.Shared;
 using Se.Contracts.Shared.Crud.QueryAll;
-using Se.Database.DbConnection;
-using Se.Database.Models;
+using Se.Database.Shared;
 using Se.Domain.Features.Orders;
 
-namespace Se.Database.Repositories;
+namespace Se.Database.Features.Orders;
 
 public class OrderRepo : Repo, ICrudRepo<OrderEntity>
 {
