@@ -17,7 +17,7 @@ public static class AppModule
         
         services.AddSingleton<IDbConnectionFactory>(new SqlServerConnectionFactory(dbConnectionString));
         
-        services.AddTransient<ICrudRepo<OrderEntity>, CrudRepo<OrderEntity>>();
+        services.AddTransient<ICrudRepo<OrderEntity>, OrderRepo>();
         services.AddTransient<ICrudRepo<ProductEntity>, CrudRepo<ProductEntity>>();
         
         return services;
