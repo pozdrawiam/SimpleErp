@@ -3,11 +3,11 @@ using Se.Contracts.Shared.Crud.DeleteMany;
 
 namespace Se.Application.Features.Orders;
 
-public class OrderDeleteCmdHandler : ICmdHandler<DeleteManyRequest>
+public class OrderDeleteManyCmdHandler : ICmdHandler<DeleteManyRequest>
 {
     private readonly IOrderRepo _orderRepo;
 
-    public OrderDeleteCmdHandler(IOrderRepo orderRepo)
+    public OrderDeleteManyCmdHandler(IOrderRepo orderRepo)
     {
         _orderRepo = orderRepo;
     }
