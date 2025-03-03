@@ -7,9 +7,9 @@ public abstract class CrudDomainRepo<TDbModel, TDomainEntity> : ICrudRepo<TDomai
     where TDbModel : class
     where TDomainEntity : class
 {
-    private readonly CrudRepo<TDbModel> _crudRepo;
+    private readonly ICrudRepo<TDbModel> _crudRepo;
 
-    protected CrudDomainRepo(CrudRepo<TDbModel> crudRepo)
+    protected CrudDomainRepo(ICrudRepo<TDbModel> crudRepo)
     {
         _crudRepo = crudRepo;
     }
@@ -29,21 +29,21 @@ public abstract class CrudDomainRepo<TDbModel, TDomainEntity> : ICrudRepo<TDomai
         return _crudRepo.QueryAllAsync(query);
     }
 
-    public async Task<int> AddAsync(TDomainEntity entity)
+    public virtual async Task<int> AddAsync(TDomainEntity entity)
     {
         var model = MapEntityToModel(entity);
         
         return await _crudRepo.AddAsync(model);
     }
 
-    public Task UpdateAsync(TDomainEntity entity)
+    public virtual Task UpdateAsync(TDomainEntity entity)
     {
         var model = MapEntityToModel(entity);
         
         return _crudRepo.UpdateAsync(model);
     }
 
-    public Task DeleteManyAsync(IReadOnlyCollection<int> ids)
+    public virtual Task DeleteManyAsync(IReadOnlyCollection<int> ids)
     {
         return _crudRepo.DeleteManyAsync(ids);
     }
