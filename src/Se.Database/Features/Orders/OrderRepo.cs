@@ -9,7 +9,7 @@ public class OrderRepo : CrudDomainRepo<OrderModel, OrderEntity>
 {
     private readonly ICrudRepo<OrderItemModel> _orderItemRepo;
 
-    public OrderRepo(CrudRepo<OrderModel> crudRepo, ICrudRepo<OrderItemModel> orderItemRepo) : base(crudRepo)
+    public OrderRepo(ICrudRepo<OrderModel> crudRepo, ICrudRepo<OrderItemModel> orderItemRepo) : base(crudRepo)
     {
         _orderItemRepo = orderItemRepo;
     }
@@ -32,6 +32,8 @@ public class OrderRepo : CrudDomainRepo<OrderModel, OrderEntity>
             
             await _orderItemRepo.AddAsync(itemModel);
         }
+        
+        scope.Complete();
 
         return orderId;
     }
