@@ -6,9 +6,9 @@ namespace Se.Application.Features.Orders;
 
 public class OrderCreateCmdHandler : ICmdHandler<OrderCreateRequest>
 {
-    private readonly IOrderRepo _repo;
+    private readonly ICrudRepo<OrderEntity> _repo;
 
-    public OrderCreateCmdHandler(IOrderRepo repo)
+    public OrderCreateCmdHandler(ICrudRepo<OrderEntity> repo)
     {
         _repo = repo;
     }

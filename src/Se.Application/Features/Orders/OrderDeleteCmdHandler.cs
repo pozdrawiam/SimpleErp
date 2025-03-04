@@ -1,13 +1,14 @@
 ﻿using Se.Application.Shared;
 using Se.Contracts.Shared.Crud.DeleteMany;
+using Se.Domain.Features.Orders;
 
 namespace Se.Application.Features.Orders;
 
 public class OrderDeleteManyCmdHandler : ICmdHandler<DeleteManyRequest>
 {
-    private readonly IOrderRepo _orderRepo;
+    private readonly ICrudRepo<OrderEntity> _orderRepo;
 
-    public OrderDeleteManyCmdHandler(IOrderRepo orderRepo)
+    public OrderDeleteManyCmdHandler(ICrudRepo<OrderEntity> orderRepo)
     {
         _orderRepo = orderRepo;
     }
