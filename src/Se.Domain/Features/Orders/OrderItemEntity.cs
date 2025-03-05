@@ -7,5 +7,5 @@ public class OrderItemEntity : Entity
 {
     public Guid Guid { get; } = Guid.NewGuid();
     public required int ProductId { get; init; }
-    public Quantity Quantity { get; set; } = 1M;
+    public Quantity Quantity { get; set; } = new(1M);
 }

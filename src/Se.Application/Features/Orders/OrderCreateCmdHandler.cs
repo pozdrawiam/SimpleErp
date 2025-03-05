@@ -1,6 +1,7 @@
 ﻿using Se.Application.Shared;
 using Se.Contracts.Features.Orders;
 using Se.Domain.Features.Orders;
+using Se.Domain.Shared.ValueObjects;
 
 namespace Se.Application.Features.Orders;
 
@@ -21,7 +22,7 @@ public class OrderCreateCmdHandler : ICmdHandler<OrderCreateRequest>
         };
         
         foreach (var item in cmd.Items)
-            entity.AddItem(item.ProductId, item.Quantity);
+            entity.AddItem(item.ProductId, new Quantity(item.Quantity));
         
         var id = await _repo.AddAsync(entity);
 

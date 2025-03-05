@@ -7,6 +7,4 @@ public class Quantity : ValueObject<decimal>
         if (value < 0.000001M)
             throw new ArgumentOutOfRangeException(nameof(value));
     }
-
-    public static implicit operator Quantity(decimal value) => new(value);
 }
