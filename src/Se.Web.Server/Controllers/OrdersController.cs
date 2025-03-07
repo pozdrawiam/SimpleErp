@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Se.Contracts.Features.Orders;
 using Se.Contracts.Shared.Crud.Create;
+using Se.Contracts.Shared.Crud.DeleteMany;
 using Se.Contracts.Shared.Crud.QueryAll;
 using Se.Web.Server.Shared;
 
@@ -40,5 +41,19 @@ public class OrdersController : AppApiController
         int id = await _mediator.Send(request);
             
         return Ok(new CreateResponse(id));
+    }
+    
+    [HttpDelete]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<DeleteManyResponse>> DeleteMany(OrderDeleteManyRequest request)
+    {
+        if (!ModelState.IsValid) 
+            return BadRequest(ModelState);
+        
+        if (request.Ids?.Count > 0)
+            await _mediator.Send(request);
+        
+        return Ok(new DeleteManyResponse());
     }
 }
