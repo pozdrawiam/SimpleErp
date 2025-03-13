@@ -4,6 +4,7 @@ using Se.Contracts.Features.Orders;
 using Se.Contracts.Shared.Crud.Create;
 using Se.Contracts.Shared.Crud.DeleteMany;
 using Se.Contracts.Shared.Crud.QueryAll;
+using Se.Contracts.Shared.Crud.Update;
 using Se.Web.Server.Shared;
 
 namespace Se.Web.Server.Controllers;
@@ -41,6 +42,20 @@ public class OrdersController : AppApiController
         int id = await _mediator.Send(request);
             
         return Ok(new CreateResponse(id));
+    }
+    
+    [HttpPut]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<UpdateResponse>> Update(OrderUpdateRequest request)
+    {
+        if (!ModelState.IsValid) 
+            return BadRequest(ModelState);
+        
+        await _mediator.Send(request);
+        
+        return Ok(new UpdateResponse());
     }
     
     [HttpDelete]
