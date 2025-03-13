@@ -7,4 +7,11 @@ public class OrderUpdateRequest : ICmd
     public int Id { get; set; }
     public string Note { get; set; } = "";
     public List<OrderItemDto> Items { get; set; } = [];
+    
+    public class OrderItemDto
+    {
+        public Guid Guid { get; set; }
+        public int ProductId { get; set; }
+        public decimal Quantity { get; set; } = 1M;
+    }
 }
