@@ -1,11 +1,11 @@
-using Se.Application.Features.Orders;
+using Se.Application.Shared;
 using Se.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddDatabaseModule(builder.Configuration);
 
-builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<OrderCreateCmdHandler>());
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining(typeof(ICmdHandler<>)));
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
