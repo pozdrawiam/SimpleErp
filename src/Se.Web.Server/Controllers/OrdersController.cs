@@ -31,6 +31,19 @@ public class OrdersController : AppApiController
         return Ok(response);
     }
     
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<OrderGetDetailsResponse>> GetDetails([FromQuery] OrderGetDetailsRequest request)
+    {
+        if (!ModelState.IsValid) 
+            return BadRequest(ModelState);
+        
+        var response = await _mediator.Send(request);
+        
+        return Ok(response);
+    }
+    
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
