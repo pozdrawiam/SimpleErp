@@ -21,7 +21,7 @@ public abstract class CrudDomainRepo<TDbModel, TDomainEntity> : ICrudRepo<TDomai
         if (model == null)
             return null;
         
-        return MapModelToEntity(model);
+        return await MapModelToEntity(model);
     }
 
     public Task<QueryAllResponse> QueryAllAsync(QueryAllRequest query)
@@ -50,5 +50,5 @@ public abstract class CrudDomainRepo<TDbModel, TDomainEntity> : ICrudRepo<TDomai
     
     protected abstract TDbModel MapEntityToModel(TDomainEntity entity);
     
-    protected abstract TDomainEntity MapModelToEntity(TDbModel model);
+    protected abstract Task<TDomainEntity> MapModelToEntity(TDbModel model);
 }
