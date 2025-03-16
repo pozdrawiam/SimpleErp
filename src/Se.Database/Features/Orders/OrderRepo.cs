@@ -1,7 +1,9 @@
 ﻿using System.Transactions;
 using Se.Application.Shared;
+using Se.Contracts.Shared.Crud.QueryAll;
 using Se.Database.Shared;
 using Se.Domain.Features.Orders;
+using Se.Domain.Shared.ValueObjects;
 
 namespace Se.Database.Features.Orders;
 
@@ -48,13 +50,31 @@ public class OrderRepo : CrudDomainRepo<OrderModel, OrderEntity>
         };
     }
 
-    protected override OrderEntity MapModelToEntity(OrderModel model)
+    protected override async Task<OrderEntity> MapModelToEntity(OrderModel model)
     {
-        return new OrderEntity
+        var entity = new OrderEntity
         {
             Id = model.Id,
             CreatedAtUtc = model.CreatedAtUtc,
             Note = model.Note
         };
+        
+        var itemModels = await _orderItemRepo.QueryAllAsync(new QueryAllRequest
+        {
+            Columns = [nameof(OrderItemModel.ProductId), nameof(OrderItemModel.Quantity)],
+            Filters = [new QueryAllFilter(nameof(OrderItemModel.OrderId), QueryAllFilterOperator.Equals, model.Id.ToString())],
+            PageNumber = 1,
+            PageSize = 1000
+        });
+
+        foreach (object?[] item in itemModels.Data)
+        {
+            int productId = (int)item[0]!;
+            decimal quantity = (decimal)item[1]!;
+            
+            entity.AddItem(productId, new Quantity(quantity));
+        }
+
+        return entity;
     }
 }
