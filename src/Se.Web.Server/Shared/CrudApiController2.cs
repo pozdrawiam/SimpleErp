@@ -1,4 +1,6 @@
-﻿using Se.Contracts.Shared.Crud.Create;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using Se.Contracts.Shared.Crud.Create;
 using Se.Contracts.Shared.Crud.DeleteMany;
 using Se.Contracts.Shared.Crud.GetDetails;
 using Se.Contracts.Shared.Crud.QueryAll;
@@ -22,4 +24,40 @@ public abstract class CrudApiController2<
     where TUpdateRequest : UpdateRequestBase
     where TDeleteManyRequest : DeleteManyRequest
 {
+    private readonly IMediator _mediator;
+
+    protected CrudApiController2(IMediator mediator)
+    {
+        _mediator = mediator;
+    }
+    
+    #region Read
+    
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<QueryAllResponse>> QueryAll(TQueryAllRequest request)
+    {
+        if (!ModelState.IsValid) 
+            return BadRequest(ModelState);
+        
+        var response = await _mediator.Send(request);
+        
+        return Ok(response);
+    }
+    
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<TGetDetailsResponse>> GetDetails([FromQuery] TGetDetailsRequest request)
+    {
+        if (!ModelState.IsValid) 
+            return BadRequest(ModelState);
+        
+        var response = await _mediator.Send(request);
+        
+        return Ok(response);
+    }
+    
+    #endregion
 }
