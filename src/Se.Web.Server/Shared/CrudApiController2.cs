@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Se.Contracts.Shared.Cqs;
 using Se.Contracts.Shared.Crud.Create;
 using Se.Contracts.Shared.Crud.DeleteMany;
 using Se.Contracts.Shared.Crud.GetDetails;
@@ -20,7 +21,7 @@ public abstract class CrudApiController2<
     where TQueryAllRequest : QueryAllRequest
     where TGetDetailsRequest : GetDetailsRequest
     where TGetDetailsResponse : GetDetailsResponseBase
-    where TCreateRequest : CreateRequestBase
+    where TCreateRequest : CreateRequestBase, ICmd
     where TUpdateRequest : UpdateRequestBase
     where TDeleteManyRequest : DeleteManyRequest
 {
@@ -57,6 +58,51 @@ public abstract class CrudApiController2<
         var response = await _mediator.Send(request);
         
         return Ok(response);
+    }
+    
+    #endregion
+    
+    #region Write
+    
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<CreateResponse>> Create(TCreateRequest request)
+    {
+        if (!ModelState.IsValid) 
+            return BadRequest(ModelState);
+        
+        int id = await _mediator.Send(request);
+            
+        return Ok(new CreateResponse(id));
+    }
+    
+    [HttpPut]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<UpdateResponse>> Update(TUpdateRequest request)
+    {
+        if (!ModelState.IsValid) 
+            return BadRequest(ModelState);
+        
+        await _mediator.Send(request);
+        
+        return Ok(new UpdateResponse());
+    }
+    
+    [HttpDelete]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<DeleteManyResponse>> DeleteMany(TDeleteManyRequest request)
+    {
+        if (!ModelState.IsValid) 
+            return BadRequest(ModelState);
+        
+        if (request.Ids?.Count > 0)
+            await _mediator.Send(request);
+        
+        return Ok(new DeleteManyResponse());
     }
     
     #endregion
