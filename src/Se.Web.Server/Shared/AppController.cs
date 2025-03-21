@@ -4,6 +4,6 @@ namespace Se.Web.Server.Shared;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-public abstract class AppApiController : ControllerBase
+public abstract class AppController : ControllerBase
 {
 }

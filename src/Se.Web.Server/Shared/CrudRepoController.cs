@@ -1,6 +1,5 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Mvc;
-using Se.Contracts.Shared.Cqs;
+﻿using Microsoft.AspNetCore.Mvc;
+using Se.Application.Shared;
 using Se.Contracts.Shared.Crud.Create;
 using Se.Contracts.Shared.Crud.DeleteMany;
 using Se.Contracts.Shared.Crud.GetDetails;
@@ -9,40 +8,36 @@ using Se.Contracts.Shared.Crud.Update;
 
 namespace Se.Web.Server.Shared;
 
-public abstract class CrudCqsApiController<
-    TQueryAllRequest,
-    TGetDetailsRequest,
+public abstract class CrudRepoController<
+    TEntity,
     TGetDetailsResponse,
     TCreateRequest,
-    TUpdateRequest,
-    TDeleteManyRequest
+    TUpdateRequest
 >
-    : AppApiController
-    where TQueryAllRequest : QueryAllRequest
-    where TGetDetailsRequest : GetDetailsRequest
+    : AppController
     where TGetDetailsResponse : GetDetailsResponseBase
-    where TCreateRequest : CreateRequestBase, ICmd
+    where TCreateRequest : CreateRequestBase
     where TUpdateRequest : UpdateRequestBase
-    where TDeleteManyRequest : DeleteManyRequest
 {
-    private readonly IMediator _mediator;
+    private readonly ICrudRepo<TEntity> _repo;
 
-    protected CrudCqsApiController(IMediator mediator)
+    protected CrudRepoController(ICrudRepo<TEntity> repo)
     {
-        _mediator = mediator;
+        _repo = repo;
     }
-    
+
     #region Read
-    
+
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<QueryAllResponse>> QueryAll(TQueryAllRequest request)
+    public async Task<ActionResult<QueryAllResponse>> QueryAll(QueryAllRequest request)
     {
         if (!ModelState.IsValid) 
             return BadRequest(ModelState);
         
-        var response = await _mediator.Send(request);
+        var result = await _repo.QueryAllAsync(request);
+        var response = new QueryAllResponse(result.Data, result.TotalCount);
         
         return Ok(response);
     }
@@ -50,20 +45,22 @@ public abstract class CrudCqsApiController<
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<TGetDetailsResponse>> GetDetails([FromQuery] TGetDetailsRequest request)
+    public async Task<ActionResult<TGetDetailsResponse>> GetDetails([FromQuery] GetDetailsRequest request)
     {
-        if (!ModelState.IsValid) 
-            return BadRequest(ModelState);
-        
-        var response = await _mediator.Send(request);
-        
+        TEntity? entity = await _repo.GetAsync(request.Id);
+
+        if (entity == null)
+            return NotFound();
+
+        var response = MapEntityToGetDetailsResponse(entity);
+
         return Ok(response);
     }
-    
+
     #endregion
     
     #region Write
-    
+
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -72,11 +69,12 @@ public abstract class CrudCqsApiController<
         if (!ModelState.IsValid) 
             return BadRequest(ModelState);
         
-        int id = await _mediator.Send(request);
+        var entity = MapCreateRequestToEntity(request);
+        int id = await _repo.AddAsync(entity);
             
         return Ok(new CreateResponse(id));
     }
-    
+
     [HttpPut]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -86,24 +84,36 @@ public abstract class CrudCqsApiController<
         if (!ModelState.IsValid) 
             return BadRequest(ModelState);
         
-        await _mediator.Send(request);
+        var entity = await _repo.GetAsync(request.Id);
+        
+        if (entity is null)
+            return NotFound();
+        
+        UpdateEntityByUpdateRequest(entity, request);
+        await _repo.UpdateAsync(entity);
         
         return Ok(new UpdateResponse());
     }
-    
+
     [HttpDelete]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<DeleteManyResponse>> DeleteMany(TDeleteManyRequest request)
+    public async Task<ActionResult<DeleteManyResponse>> DeleteMany(DeleteManyRequest request)
     {
         if (!ModelState.IsValid) 
             return BadRequest(ModelState);
         
         if (request.Ids?.Count > 0)
-            await _mediator.Send(request);
+            await _repo.DeleteManyAsync(request.Ids);
         
         return Ok(new DeleteManyResponse());
     }
     
     #endregion
+
+    protected abstract TGetDetailsResponse MapEntityToGetDetailsResponse(TEntity product);
+    
+    protected abstract TEntity MapCreateRequestToEntity(TCreateRequest request);
+    
+    protected abstract void UpdateEntityByUpdateRequest(TEntity entity, TUpdateRequest request);
 }
