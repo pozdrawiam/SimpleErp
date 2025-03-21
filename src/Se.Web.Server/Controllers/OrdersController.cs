@@ -4,7 +4,7 @@ using Se.Web.Server.Shared;
 
 namespace Se.Web.Server.Controllers;
 
-public class OrdersController : CrudApiController2<
+public class OrdersController : CrudCqsApiController<
     OrdersQueryAllRequest,
     OrderGetDetailsRequest,
     OrderGetDetailsResponse,

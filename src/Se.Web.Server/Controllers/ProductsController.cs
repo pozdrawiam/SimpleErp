@@ -5,7 +5,7 @@ using Se.Web.Server.Shared;
 
 namespace Se.Web.Server.Controllers;
 
-public class ProductsController : CrudApiController<ProductEntity, ProductGetDetailsResponse, ProductCreateRequest, ProductUpdateRequest>
+public class ProductsController : CrudRepoApiController<ProductEntity, ProductGetDetailsResponse, ProductCreateRequest, ProductUpdateRequest>
 {
     public ProductsController(ICrudRepo<ProductEntity> repo) : base(repo)
     {
