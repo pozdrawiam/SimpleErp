@@ -1,10 +1,14 @@
 ﻿using Se.Contracts.Shared.Cqs;
+using Se.Contracts.Shared.Crud.Update;
 
 namespace Se.Contracts.Features.Orders;
 
-public class OrderUpdateRequest : ICmd
+public record OrderUpdateRequest : UpdateRequestBase, ICmd
 {
-    public int Id { get; set; }
+    public OrderUpdateRequest(int Id) : base(Id)
+    {
+    }
+
     public string Note { get; set; } = "";
     public List<OrderItemDto> Items { get; set; } = [];
     

@@ -1,8 +1,9 @@
 ﻿using Se.Contracts.Shared.Cqs;
+using Se.Contracts.Shared.Crud.Create;
 
 namespace Se.Contracts.Features.Orders;
 
-public class OrderCreateRequest : ICmd
+public record OrderCreateRequest : CreateRequestBase, ICmd
 {
     public string Note { get; set; } = "";
     public List<OrderItemDto> Items { get; set; } = [];
