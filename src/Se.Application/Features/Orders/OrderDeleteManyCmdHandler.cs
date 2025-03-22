@@ -1,6 +1,5 @@
 ﻿using Se.Application.Shared;
 using Se.Contracts.Features.Orders;
-using Se.Contracts.Shared.Crud.DeleteMany;
 using Se.Domain.Features.Orders;
 
 namespace Se.Application.Features.Orders;
