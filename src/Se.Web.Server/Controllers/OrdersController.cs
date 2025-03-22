@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Se.Contracts.Features.Orders;
-using Se.Web.Server.Shared;
 
 namespace Se.Web.Server.Controllers;
 

@@ -1,7 +1,6 @@
 ﻿using Se.Application.Shared;
 using Se.Contracts.Features.Products;
 using Se.Domain.Features.Products;
-using Se.Web.Server.Shared;
 
 namespace Se.Web.Server.Controllers;
 
