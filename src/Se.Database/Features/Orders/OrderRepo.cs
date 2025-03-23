@@ -7,7 +7,7 @@ using Se.Domain.Shared.ValueObjects;
 
 namespace Se.Database.Features.Orders;
 
-public class OrderRepo : CrudDomainRepo<OrderModel, OrderEntity>
+internal class OrderRepo : CrudDomainRepo<OrderModel, OrderEntity>
 {
     private readonly ICrudRepo<OrderItemModel> _orderItemRepo;
 

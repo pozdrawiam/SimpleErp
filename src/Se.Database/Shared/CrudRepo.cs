@@ -8,7 +8,7 @@ using Se.Contracts.Shared.Crud.QueryAll;
 
 namespace Se.Database.Shared;
 
-public class CrudRepo<TEntity> : Repo, ICrudRepo<TEntity>
+internal class CrudRepo<TEntity> : Repo, ICrudRepo<TEntity>
     where TEntity : class
 {
     public CrudRepo(IDbConnectionFactory connectionFactory) : base(connectionFactory)
