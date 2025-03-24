@@ -1,5 +1,4 @@
-﻿using Se.Contracts.Shared.Cqs;
-using Se.Contracts.Shared.Crud.Create;
+﻿using Se.Contracts.Shared.Crud.Create;
 
 namespace Se.Contracts.Features.Orders;
 

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Se.Contracts.Shared.Cqs;
 
 namespace Se.Contracts.Shared.Crud.DeleteMany;
 
