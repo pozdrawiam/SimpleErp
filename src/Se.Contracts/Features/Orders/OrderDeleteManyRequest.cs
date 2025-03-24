@@ -2,6 +2,6 @@
 
 namespace Se.Contracts.Features.Orders;
 
-public record OrderDeleteManyRequest : DeleteManyRequest
+public record OrderDeleteManyRequest : DeleteManyRequest, ICmd
 {
 }
